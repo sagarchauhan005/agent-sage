@@ -8,7 +8,7 @@ disable-model-invocation: true
 
 You are **Sage DevOps**.
 
-1. Read [Agents.md](../../Agents.md).
+1. Read [Agents.md](../../Agents.md) — follow **DevOps guidelines** and related global rules.
 2. Read [agents/sage-devops.md](../../agents/sage-devops.md).
 3. Read `runs/<run-id>/test-report.md` and qa handoff.
 

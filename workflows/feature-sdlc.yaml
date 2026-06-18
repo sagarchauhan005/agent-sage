@@ -1,12 +1,56 @@
 # Sage SDLC — feature workflow
 # Parent: ../Agents.md
+#
+# Terminology:
+#   Orchestrator (sage-orchestrator) — owns the pipeline end to end
+#   Full-stack (sage-fullstack)       — builds BOTH backend and frontend code
+#   web-product profile               — full web SDLC; uses sage-fullstack for build
 
 name: sage-feature-sdlc
-version: 1
+version: 3
 
 run_dir: runs/{run_id}
 manifest: runs/{run_id}/manifest.json
 handoff_dir: runs/{run_id}/handoffs
+
+profiles:
+  web-product:
+    description: Web product feature — orchestrator drives full SDLC; full-stack agent builds UI + API
+    default_route_after_plan: design
+    phases: [plan, design, architect, build-fullstack, qa, devops, release]
+    skipped_phases: [build-backend, build-frontend]
+    qa_requires: [build-fullstack]
+    qa_next: devops
+    qa_handoff: qa-to-devops.md
+
+  library-backend:
+    description: Backend library or module — no UI, no deploy phase
+    default_route_after_plan: architect
+    architect_optional: true
+    phases: [plan, architect, build-backend, qa, release]
+    skipped_phases: [design, build-frontend, build-fullstack, devops]
+    qa_requires: [build-backend]
+    qa_next: release
+    qa_handoff: qa-to-release.md
+
+  backend-api:
+    description: API or backend service — deploy packaging, no UI
+    default_route_after_plan: architect
+    phases: [plan, architect, build-backend, qa, devops, release]
+    skipped_phases: [design, build-frontend, build-fullstack]
+    qa_requires: [build-backend]
+    qa_next: devops
+    qa_handoff: qa-to-devops.md
+
+  ui-feature:
+    description: Frontend-heavy feature — design and frontend build only
+    default_route_after_plan: design
+    build_backend_optional: true
+    phases: [plan, design, architect, build-frontend, qa, release]
+    skipped_phases: [build-fullstack, build-backend, devops]
+    qa_requires: [build-frontend]
+    qa_next: release
+    qa_handoff: qa-to-release.md
 
 phases:
   - id: plan
@@ -24,7 +68,7 @@ phases:
       - design
       - architect
       - build-backend
-    parallel: false
+    skippable: false
 
   - id: design
     order: 2
@@ -33,7 +77,8 @@ phases:
     artifact: design.md
     handoff: design-to-architect.md
     next: architect
-    parallel: false
+    requires: [plan]
+    skippable: true
 
   - id: architect
     order: 3
@@ -42,9 +87,20 @@ phases:
     artifact: architecture.md
     handoff: architect-to-build.md
     next: build
-    parallel: false
     requires: [plan]
     optional: [design]
+    skippable: true
+
+  - id: build-fullstack
+    order: 4
+    agent: sage-fullstack
+    command: sage-fullstack
+    artifact: build-fullstack.md
+    handoff: build-fullstack-to-qa.md
+    next: qa
+    requires: [plan, architect]
+    optional: [design]
+    skippable: true
 
   - id: build-backend
     order: 4
@@ -53,10 +109,9 @@ phases:
     artifact: build-backend.md
     handoff: build-backend-to-qa.md
     next: qa
-    parallel: true
-    parallel_group: build
     requires: [plan]
     optional: [architect]
+    skippable: true
 
   - id: build-frontend
     order: 4
@@ -65,19 +120,22 @@ phases:
     artifact: build-frontend.md
     handoff: build-frontend-to-qa.md
     next: qa
-    parallel: true
-    parallel_group: build
-    requires: [architect]
+    requires: [plan]
+    optional: [design, architect]
+    skippable: true
 
   - id: qa
     order: 5
     agent: sage-qa
     command: sage-qa
     artifact: test-report.md
-    handoff: qa-to-devops.md
-    next: devops
-    parallel: false
-    requires: [build-backend, build-frontend]
+    handoff_options:
+      - qa-to-devops.md
+      - qa-to-release.md
+    next_options:
+      - devops
+      - release
+    skippable: false
 
   - id: devops
     order: 6
@@ -86,7 +144,8 @@ phases:
     artifact: deploy-report.md
     handoff: devops-to-release.md
     next: release
-    parallel: false
+    requires: [qa]
+    skippable: true
 
   - id: release
     order: 7
@@ -95,10 +154,8 @@ phases:
     artifact: release-report.md
     handoff: release-complete.md
     next: done
-    parallel: false
-    gates:
-      - push
-      - pr
+    gates: [push, pr]
+    skippable: false
 
 gates:
   push:

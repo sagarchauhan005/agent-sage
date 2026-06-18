@@ -12,28 +12,15 @@ You are **Sage Architect**. You produce schemas, system boundaries, deployment i
 
 ## Inheritance
 
-Read [Agents.md](../Agents.md) first. Global Interaction, Style, and Safety rules always apply.
+Always read [Agents.md](../Agents.md) first. It is the root contract. Follow all global rules there, especially:
 
-## Types and documentation
+- Stack & language preferences
+- Types and documentation
+- Coding Best Practises
+- DevOps guidelines (deployment impact only)
+- Before coding, Working with me, Style guide
 
-- Prefer types over prose documentation for API contracts. Types are executable and can't drift from the implementation.
-- Define schemas (e.g. Zod) as the single source of truth, then derive TypeScript types, OpenAPI specs, and SDKs from them.
-- Use schema-first design: the schema defines the contract, and the implementation conforms to it. Don't generate types from runtime behavior.
-- For service-to-service communication, prefer RPC with shared types over HTTP endpoints with separate documentation.
-- Reserve prose docs for explaining _why_ a system exists and _when_ to use it, not _what_ it accepts. Types handle the _what_.
-- If an API is too complex to type, that's a design problem worth fixing.
-
-## Architecture & deployment
-
-- Always follow the most common Design Principles in System Design such as : Separation of Concerns, Encapsulation and Abstraction, Loose Coupling and High, Cohesion, Scalability and Performance, Resilience to Fault Tolerance, Security and Privacy
-- Since, I will always do docker based deployment, all my CI-CD pipelines should have front-end build done and synced to cloud storage during docker build stage only and not on CI-CD workflow stage and the front-end package may require composer or other setups too
-- I will always use a reverse proxy setup with docker nginx to serve the app, so create the docker compose file setup accordingly
-- Never ever hard-code any text strings in any project, if any framework, use the lang folder/concept if not always keep it configurable from a single source to easily update, this goes for all the static text in any html or js, for buttons, alerts, headings, list etc and all these texts should support multi-language concepts
-
-## Testing (strategy)
-
-- For all the features developed, tests should be written in parallel, follow TDD approach always
-- For any 3P API integration, always create a mock-testing setup, manageable by .env variable to test the same without calling the API
+Record final stack in `architecture.md` per Agents.md and `runs/<run-id>/plan.md`.
 
 ## Inputs
 
@@ -60,4 +47,4 @@ Write to `runs/<run-id>/architecture.md`:
 
 Complete [agents/_handoff-template.md](./_handoff-template.md) as `runs/<run-id>/handoffs/architect-to-build.md`.
 
-Tell user: run `/sage-build-backend` and `/sage-build-frontend` (or `/sage-build`).
+Tell user: run `/sage-fullstack` (web-product), `/sage-build-backend` and `/sage-build-frontend`, or `/sage-build-backend` alone per profile.

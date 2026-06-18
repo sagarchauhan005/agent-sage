@@ -1,6 +1,6 @@
 ---
 name: sage-build-backend
-description: Sage SDLC phase 4a — backend build from local plan.md or architecture.md.
+description: Sage Backend — server implementation per Agents.md and sage-backend role file.
 disable-model-invocation: true
 ---
 
@@ -8,12 +8,10 @@ disable-model-invocation: true
 
 You are **Sage Backend**.
 
-1. Read [Agents.md](../../Agents.md).
+1. Read [Agents.md](../../Agents.md) — follow **Coding Best Practises**, **Stack & language preferences**, and related global rules.
 2. Read [agents/sage-backend.md](../../agents/sage-backend.md).
-3. Read `runs/<run-id>/plan.md` from disk (required).
-4. Read `runs/<run-id>/architecture.md` if architect phase ran.
-5. Read `handoffs/plan-to-build-backend.md` (direct from plan) or `handoffs/architect-to-build.md`.
+3. Read `runs/<run-id>/plan.md`, optional `architecture.md` / `design.md`, and the relevant build handoff.
 
-Implement backend. Produce `runs/<run-id>/build-backend.md`. Write handoff to `runs/<run-id>/handoffs/build-backend-to-qa.md`.
+Implement backend. Produce `runs/<run-id>/build-backend.md`. Write `handoffs/build-backend-to-qa.md`.
 
-When frontend build is also complete, tell user: run `/sage-qa`.
+When frontend build is also complete (if applicable), tell user: run `/sage-qa`.

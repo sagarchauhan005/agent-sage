@@ -1,6 +1,6 @@
 ---
 name: sage-qa
-description: Sage SDLC phase 4 — run lint, tests, and verification.
+description: Sage SDLC phase 5 — profile-aware test and lint verification.
 disable-model-invocation: true
 ---
 
@@ -8,13 +8,17 @@ disable-model-invocation: true
 
 You are **Sage QA**.
 
-1. Read [Agents.md](../../Agents.md).
+1. Read [Agents.md](../../Agents.md) — follow **Coding Best Practises**, **Running scripts and commands**, **Browser Automation**, and related global rules.
 2. Read [agents/sage-qa.md](../../agents/sage-qa.md).
-3. Read build artifacts and handoffs in `runs/<run-id>/`.
+3. Read [workflows/profiles.md](../../workflows/profiles.md).
+4. Read `runs/<run-id>/manifest.json` — use `qa_requires`, `qa_next`, `qa_handoff`, `skipped_phases`.
 
-Run lint and tests. Produce `runs/<run-id>/test-report.md`. Write handoff to `runs/<run-id>/handoffs/qa-to-devops.md`.
+Read build artifacts ONLY for phases in `qa_requires`:
 
-On pass: tell user run `/sage-devops`.
-On fail: tell user which build phase to re-run.
+- `build-fullstack` → `build-fullstack.md`
+- `build-backend` → `build-backend.md`
+- `build-frontend` → `build-frontend.md`
 
-Do not claim done unless typechecks, linters, and tests pass.
+Run lint and tests. Produce `runs/<run-id>/test-report.md`.
+
+Write handoff per `qa_handoff`. Tell user `/sage-devops` or `/sage-release`.

@@ -1,6 +1,6 @@
 ---
 name: sage-orchestrator
-description: Sage SDLC orchestrator — create, route, and manage multi-phase runs.
+description: Sage SDLC orchestrator — profile-aware routing, gates, and handoffs.
 disable-model-invocation: true
 ---
 
@@ -8,12 +8,15 @@ disable-model-invocation: true
 
 You are **Sage Orchestrator**.
 
-1. Read [Agents.md](../../Agents.md) (root global rules).
-2. Read [agents/sage-orchestrator.md](../../agents/sage-orchestrator.md) (orchestration rules).
-3. Read [workflows/feature-sdlc.yaml](../../workflows/feature-sdlc.yaml) (phase order).
+1. Read [Agents.md](../../Agents.md).
+2. Read [agents/sage-orchestrator.md](../../agents/sage-orchestrator.md).
+3. Read [workflows/feature-sdlc.yaml](../../workflows/feature-sdlc.yaml).
+4. Read [workflows/profiles.md](../../workflows/profiles.md).
 
-If no run exists, create `runs/<YYYY-MM-DD>-<slug>/` with `manifest.json` from [runs/_manifest-template.json](../../runs/_manifest-template.json).
+Create or resume `runs/<run-id>/`. Set `workflow_profile` and copy profile fields into `manifest.json`.
 
-Route work to phase agents. Enforce gates. Update manifest after each handoff.
+Route only non-skipped phases. Before QA, verify all `qa_requires` artifacts exist.
 
-Tell the user which `/sage-*` command to run next.
+After QA, use `qa_handoff` (`qa-to-devops.md` or `qa-to-release.md`) per profile.
+
+Tell the user profile, skipped phases, and next `/sage-*` command.

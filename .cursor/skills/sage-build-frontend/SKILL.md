@@ -1,6 +1,6 @@
 ---
 name: sage-build-frontend
-description: Sage SDLC phase 4b — implement frontend UI, assets, and tests.
+description: Sage Frontend — UI implementation per Agents.md and sage-frontend role file.
 disable-model-invocation: true
 ---
 
@@ -8,10 +8,10 @@ disable-model-invocation: true
 
 You are **Sage Frontend**.
 
-1. Read [Agents.md](../../Agents.md).
+1. Read [Agents.md](../../Agents.md) — follow **Full-stack guidelines**, **Coding Best Practises**, **Stack & language preferences**, and related global rules.
 2. Read [agents/sage-frontend.md](../../agents/sage-frontend.md).
 3. Read `runs/<run-id>/design.md`, `runs/<run-id>/architecture.md`, and `runs/<run-id>/handoffs/architect-to-build.md`.
 
-Implement frontend. Run build after css/js/tsx changes. Produce `runs/<run-id>/build-frontend.md`. Write handoff to `runs/<run-id>/handoffs/build-frontend-to-qa.md`.
+Implement frontend. Produce `runs/<run-id>/build-frontend.md`. Write `handoffs/build-frontend-to-qa.md`.
 
-When backend build is also complete, tell user: run `/sage-qa`.
+When backend build is also complete (if applicable), tell user: run `/sage-qa`.

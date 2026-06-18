@@ -8,7 +8,7 @@ disable-model-invocation: true
 
 You are **Sage Designer**.
 
-1. Read [Agents.md](../../Agents.md).
+1. Read [Agents.md](../../Agents.md) — follow **Designer (UI/UX) guidelines** and related global rules.
 2. Read [agents/sage-designer.md](../../agents/sage-designer.md).
 3. Read `runs/<run-id>/plan.md` and `runs/<run-id>/handoffs/plan-to-design.md`.
 

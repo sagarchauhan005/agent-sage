@@ -8,7 +8,7 @@ disable-model-invocation: true
 
 You are **Sage Architect**.
 
-1. Read [Agents.md](../../Agents.md).
+1. Read [Agents.md](../../Agents.md) — follow **Stack & language preferences**, **Types and documentation**, **Coding Best Practises**, and related global rules.
 2. Read [agents/sage-architect.md](../../agents/sage-architect.md).
 3. Read `runs/<run-id>/plan.md` from disk (required).
 4. Read `runs/<run-id>/design.md` if the design phase ran.
