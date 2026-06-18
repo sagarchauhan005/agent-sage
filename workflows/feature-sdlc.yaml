@@ -1,0 +1,116 @@
+# Sage SDLC — feature workflow
+# Parent: ../Agents.md
+
+name: sage-feature-sdlc
+version: 1
+
+run_dir: runs/{run_id}
+manifest: runs/{run_id}/manifest.json
+handoff_dir: runs/{run_id}/handoffs
+
+phases:
+  - id: plan
+    order: 1
+    agent: sage-planner
+    command: sage-plan
+    artifact: plan.md
+    plan_mode: required
+    local_plan_path: runs/{run_id}/plan.md
+    handoff_options:
+      - plan-to-design.md
+      - plan-to-architect.md
+      - plan-to-build-backend.md
+    next_options:
+      - design
+      - architect
+      - build-backend
+    parallel: false
+
+  - id: design
+    order: 2
+    agent: sage-designer
+    command: sage-design
+    artifact: design.md
+    handoff: design-to-architect.md
+    next: architect
+    parallel: false
+
+  - id: architect
+    order: 3
+    agent: sage-architect
+    command: sage-architect
+    artifact: architecture.md
+    handoff: architect-to-build.md
+    next: build
+    parallel: false
+    requires: [plan]
+    optional: [design]
+
+  - id: build-backend
+    order: 4
+    agent: sage-backend
+    command: sage-build-backend
+    artifact: build-backend.md
+    handoff: build-backend-to-qa.md
+    next: qa
+    parallel: true
+    parallel_group: build
+    requires: [plan]
+    optional: [architect]
+
+  - id: build-frontend
+    order: 4
+    agent: sage-frontend
+    command: sage-build-frontend
+    artifact: build-frontend.md
+    handoff: build-frontend-to-qa.md
+    next: qa
+    parallel: true
+    parallel_group: build
+    requires: [architect]
+
+  - id: qa
+    order: 5
+    agent: sage-qa
+    command: sage-qa
+    artifact: test-report.md
+    handoff: qa-to-devops.md
+    next: devops
+    parallel: false
+    requires: [build-backend, build-frontend]
+
+  - id: devops
+    order: 6
+    agent: sage-devops
+    command: sage-devops
+    artifact: deploy-report.md
+    handoff: devops-to-release.md
+    next: release
+    parallel: false
+
+  - id: release
+    order: 7
+    agent: sage-release
+    command: sage-release
+    artifact: release-report.md
+    handoff: release-complete.md
+    next: done
+    parallel: false
+    gates:
+      - push
+      - pr
+
+gates:
+  push:
+    description: User must approve before git push
+    default: pending_user
+  pr:
+    description: User must approve before PR creation
+    default: pending_user
+  deploy:
+    description: User must approve before deploy
+    default: pending_user
+
+on_failure:
+  action: loop_to_phase
+  notify: user

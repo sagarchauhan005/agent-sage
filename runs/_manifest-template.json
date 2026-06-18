@@ -1,0 +1,22 @@
+{
+  "run_id": "",
+  "feature": "",
+  "branch": "",
+  "ticket": "",
+  "created_at": "",
+  "phase": "plan",
+  "phase_status": "pending",
+  "plan_mode": "required",
+  "plan_file": "",
+  "route_after_plan": "",
+  "completed_phases": [],
+  "gates": {
+    "push": "pending_user",
+    "pr": "pending_user",
+    "deploy": "pending_user"
+  },
+  "agents": {
+    "current": "sage-orchestrator",
+    "next_command": "sage-plan"
+  }
+}
