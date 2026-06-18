@@ -1,4 +1,5 @@
 {
+  "$schema": "./_manifest-template.schema.json",
   "run_id": "",
   "feature": "",
   "branch": "",

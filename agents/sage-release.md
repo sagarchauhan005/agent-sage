@@ -38,6 +38,8 @@ Always read [Agents.md](../Agents.md) first. It is the root contract. Follow all
 
 ## Inputs
 
+Resolve `<run-id>` via `runs/.current` (Agents.md → Current run pointer) unless the user names a run.
+
 Read `manifest.json`. Then read one of:
 
 - `runs/<run-id>/deploy-report.md` and `runs/<run-id>/handoffs/devops-to-release.md` (after devops)

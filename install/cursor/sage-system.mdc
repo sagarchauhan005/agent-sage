@@ -1,0 +1,16 @@
+---
+description: Sage SDLC — use /sage-* slash commands; global install at ~/.sage
+alwaysApply: false
+---
+
+# Sage system (global install)
+
+When the user invokes `/sage-*` or asks for Sage SDLC work:
+
+1. New project with no `./runs/` or `.sage-project.json`? Suggest `/sage-init` first.
+2. Read the root contract: `./Agents.md` at workspace root if present, else `$HOME/.sage/Agents.md`.
+3. Load the matching skill from `$HOME/.sage/skills/` (also linked in `~/.cursor/skills/sage-*`).
+4. Write run artifacts under `./runs/<run-id>/` in the current workspace.
+5. Role files live in `$HOME/.sage/agents/`. Workflow profiles: `$HOME/.sage/workflows/profiles.md`.
+
+Never skip plan, build, qa, or release except via `manifest.skipped_phases`.

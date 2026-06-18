@@ -38,6 +38,8 @@ Record final stack in `architecture.md` per Agents.md and `runs/<run-id>/plan.md
 
 ## Inputs
 
+Resolve `<run-id>` via `runs/.current` (Agents.md → Current run pointer) unless the user names a run.
+
 Read from disk (never chat-only):
 
 - `runs/<run-id>/plan.md` (required)

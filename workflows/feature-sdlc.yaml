@@ -25,7 +25,7 @@ profiles:
   library-backend:
     description: Backend library or module — no UI, no deploy phase
     default_route_after_plan: architect
-    architect_optional: true
+    architect_optional: true  # decision rule: agents/sage-planner.md "library-backend architect_optional rule"
     phases: [plan, architect, build, qa, release]
     skipped_phases: [design, devops]
     qa_requires: [build]

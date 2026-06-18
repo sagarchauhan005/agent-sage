@@ -29,7 +29,7 @@ Always read [Agents.md](../Agents.md) first. It is the root contract. Follow all
 
 ## Responsibilities
 
-1. Create or resume a run in `runs/<run-id>/`
+1. Create or resume a run in `runs/<run-id>/`, then write `runs/.current` with that `<run-id>` (see Agents.md → Current run pointer)
 2. Set `workflow_profile` and copy profile defaults into `manifest.json`
 3. Maintain `manifest.json` as the source of truth
 4. Route to the correct phase agent (via slash command or Task subagent)
@@ -67,6 +67,10 @@ If the planner routes plan → `build` and `architect` is not already in `skippe
 ## Run layout
 
 ```
+runs/
+├── _manifest-template.json
+├── _plan-template.md       ← copy to runs/<run-id>/plan.md
+├── .current                ← active run-id, see Agents.md → Current run pointer
 runs/<run-id>/
 ├── manifest.json
 ├── plan.md
@@ -80,6 +84,8 @@ runs/<run-id>/
 ```
 
 ## manifest.json schema
+
+Formal JSON Schema: [runs/_manifest-template.schema.json](../runs/_manifest-template.schema.json). Validate against it before advancing a phase if tooling is available.
 
 ```json
 {
@@ -132,7 +138,8 @@ Before advancing after QA, use `qa_next`:
 ## Plan phase rules
 
 - `/sage-plan` MUST use Plan mode (Cursor `SwitchMode` → plan, or equivalent in Claude/Codex).
-- Plan output MUST be saved locally at `runs/<run-id>/plan.md` before any downstream phase.
+- Plan output MUST be saved locally at `runs/<run-id>/plan.md` before any downstream phase. Copy [runs/_plan-template.md](../runs/_plan-template.md) when creating a new run.
+- Plan length hard rail: 2–3 pages max (~1,500 words / ~120 lines). Reject or send back plans that exceed it.
 - Planner sets `workflow_profile` if not already set.
 - After plan, route per `route_after_plan`:
   - `design` → `/sage-design`
@@ -166,7 +173,7 @@ Set `gates.<name>` to `approved` only after explicit user confirmation.
 When delegating, pass this context block:
 
 ```
-Sage run: <run-id>
+Sage run: <run-id>          (resolve via runs/.current if not already known)
 Profile: <workflow_profile>
 Phase: <phase>
 Skipped: <skipped_phases>

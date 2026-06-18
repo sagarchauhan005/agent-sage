@@ -48,6 +48,8 @@ Skip browser/E2E when `design` was skipped and the profile has no UI scope, unle
 
 ## Inputs
 
+Resolve `<run-id>` via `runs/.current` (Agents.md → Current run pointer) unless the user names a run.
+
 Read `manifest.json`, then:
 
 | Required | Artifact | Handoff |

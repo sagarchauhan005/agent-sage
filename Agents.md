@@ -17,6 +17,33 @@ Sage is your SDLC agent orchestration system. **Agents.md is the root contract.*
 | 7 Ship | Sage Release | [agents/sage-release.md](agents/sage-release.md) | `/sage-release` |
 | Status | Sage Status | [agents/sage-orchestrator.md](agents/sage-orchestrator.md) | `/sage-status` |
 | Handoff | Sage Handoff | [agents/_handoff-template.md](agents/_handoff-template.md) | `/sage-handoff` |
+| Init | Sage Init | [agents/sage-init.md](agents/sage-init.md) | `/sage-init` |
+
+## Skills mirror
+
+Cursor skills in `.cursor/skills/` must match this registry. Add or remove a skill in the same change as its agent file.
+
+| Skill folder | Slash command | Agent file |
+|--------------|---------------|------------|
+| sage-orchestrator | `/sage-orchestrator` | [agents/sage-orchestrator.md](agents/sage-orchestrator.md) |
+| sage-plan | `/sage-plan` | [agents/sage-planner.md](agents/sage-planner.md) |
+| sage-design | `/sage-design` | [agents/sage-designer.md](agents/sage-designer.md) |
+| sage-architect | `/sage-architect` | [agents/sage-architect.md](agents/sage-architect.md) |
+| sage-engineer | `/sage-engineer` | [agents/sage-engineer.md](agents/sage-engineer.md) |
+| sage-build | `/sage-build` (alias) | [agents/sage-engineer.md](agents/sage-engineer.md) |
+| sage-qa | `/sage-qa` | [agents/sage-qa.md](agents/sage-qa.md) |
+| sage-devops | `/sage-devops` | [agents/sage-devops.md](agents/sage-devops.md) |
+| sage-release | `/sage-release` | [agents/sage-release.md](agents/sage-release.md) |
+| sage-status | `/sage-status` | [agents/sage-orchestrator.md](agents/sage-orchestrator.md) (status mode) |
+| sage-handoff | `/sage-handoff` | [agents/_handoff-template.md](agents/_handoff-template.md) |
+| sage-init | `/sage-init` | [agents/sage-init.md](agents/sage-init.md) |
+| about-sage | (overview only) | — |
+
+Rules:
+
+- One skill folder per row above. No orphan skill folders (e.g. no per-stack build skills).
+- Skill folder name = slash command without the leading slash.
+- `about-sage` and `sage-init` are meta skills; they are not SDLC phase agents.
 
 ## SDLC flow
 
@@ -52,6 +79,16 @@ See [workflows/profiles.md](workflows/profiles.md) for when to use each profile.
 
 Run artifacts live in `runs/<run-id>/`. The orchestrator reads and updates `manifest.json` at each phase.
 
+## Current run pointer
+
+`runs/.current` is a plain text file holding the active run-id, for example `2026-06-18-feature-name`. It resolves which run a phase command acts on when more than one `runs/<run-id>/` directory exists.
+
+- Orchestrator and Planner write `runs/.current` whenever they create or resume a run.
+- Every phase agent reads `runs/.current` first to resolve `<run-id>`.
+- If the user names a run explicitly, use that instead and update `runs/.current` to match.
+- Fall back to the most recently modified `runs/<run-id>/` only if `runs/.current` is missing, and tell the user this is a guess, not a confirmed match.
+- `runs/.current` is local state, not run history. It is gitignored and will not survive a fresh clone.
+
 Handoff template: [agents/_handoff-template.md](agents/_handoff-template.md)
 
 ---
@@ -71,8 +108,10 @@ If the project already has code, **do not recommend or suggest a language**. Det
 When there is no existing codebase (or the user explicitly asked for greenfield), the planner may **recommend** a stack in Plan mode:
 
 1. Problem fit — which language suits the task (concurrency, library, API, UI, ecosystem).
-2. If still tied — backend preference order: PHP → Node.js → Python; frontend: JavaScript → Nuxt.js.
+2. If still tied — backend preference order: PHP → Node.js; frontend: JavaScript → Nuxt.js.
 3. State rationale in `plan.md` (2–3 bullets). If multiple stacks are reasonable, present options; do not pick silently.
+
+Do not recommend Python for greenfield projects. If the codebase already uses Python, adapt to it per **Existing codebase** above.
 
 The architect confirms or refines the choice in `architecture.md`. Build agents follow the plan and codebase.
 
@@ -80,7 +119,6 @@ The architect confirms or refines the choice in `architecture.md`. Build agents 
 
 1. PHP
 2. Node.js
-3. Python
 
 ## Frontend preference order (greenfield tiebreaker)
 
@@ -89,21 +127,19 @@ The architect confirms or refines the choice in `architecture.md`. Build agents 
 
 ## Runtime vs coding style
 
-Use the **latest stable** PHP, Node.js, and Python runtime versions in Docker, CI, and local tooling. Coding **style** stays at the versions below (syntax, APIs, and patterns), not the runtime pin.
+Use the **latest stable** PHP and Node.js runtime versions in Docker, CI, and local tooling. Coding **style** stays at the versions below (syntax, APIs, and patterns), not the runtime pin.
 
 | Stack            | Coding style version                          | Runtime version        |
 |------------------|-----------------------------------------------|------------------------|
 | Vanilla JS       | ES6 / ES2015–2017                            | n/a                    |
 | Node.js          | ES6 / ES2015–2017 (same JS style; Node is the runtime) | latest stable Node.js |
 | PHP              | PHP 7.x idioms and patterns                   | latest stable PHP      |
-| Python           | Python 3.6–3.9 idioms and patterns            | latest stable Python   |
 | Nuxt.js          | Vue 2 / Nuxt 2 Options API                    | per project lockfile   |
 
 Style rules in brief:
 
 - JavaScript / Node: `const`/`let`, arrows, classes, promises/async-await; avoid syntax after ES2017 (no optional chaining, nullish coalescing, etc.) unless the repo already uses them.
 - PHP: PHP 7.x-style code on latest PHP; no PHP 8-only syntax (attributes, union types, match, named args, etc.) unless the repo already uses them.
-- Python: 3.6–3.9-era patterns on latest Python; no structural pattern matching or other 3.10+ syntax unless the repo already uses them.
 - Nuxt / Vue: Options API, Nuxt 2 conventions; not Composition API-first, not Nuxt 3, unless the repo is already on them.
 
 If a project AGENTS.md or lockfile contradicts this table, follow the project.
@@ -122,6 +158,9 @@ If a project AGENTS.md or lockfile contradicts this table, follow the project.
 - Set `route_after_plan` (`design`, `architect`, or `build`) and copy profile fields: `skipped_phases`, `qa_requires`, `qa_next`, `qa_handoff`.
 - For `spike`, mark throwaway scope and success criteria explicitly in the plan.
 - Always write the plan to `runs/<run-id>/plan.md` (exception to documentation folder rule).
+- Structure `plan.md` as a three-layer design doc per [agents/sage-planner.md](agents/sage-planner.md): problem & requirements → functional spec (external behavior, edge cases, flow diagram, failure callouts) → technical spec (internals). Each layer must trace to the previous. Include **How to run (terminal / CLI)** with copy-paste framework and barebone commands. Include planned test cases at the end.
+- Start from [runs/_plan-template.md](runs/_plan-template.md). **Hard rail:** no plan longer than 2–3 pages (~1,500 words or ~120 lines max). Compress or defer detail to `design.md` / `architecture.md`.
+- Global install: `./scripts/install.sh` puts skills in `~/.sage/` and links them for Cursor, Claude, and/or Codex. New repo: run `/sage-init` first (or `./scripts/install.sh --project .`).
 
 ## Designer (UI/UX) guidelines
 - All UI/UX design should be made in Shadcn or Tailwind only for any small module, or large feature
@@ -133,7 +172,7 @@ If a project AGENTS.md or lockfile contradicts this table, follow the project.
 - [Most important] Make a local commit after every changes you run as an agent, without fail for easy logs.
 - Do not push the code to main branch without confirmation
 - For all the features developed, tests should be written in parallel, follow TDD approach always
-- The assets in public folder should at every build be synced to a cloud storage that is configured and only those cloud links should be used
+- The assets in public folder should at every build be synced to a cloud storage that is configured and only those cloud links should be used. Read the provider from env vars, never hardcode: `CDN_PROVIDER`, `CDN_BUCKET`, `CDN_BASE_URL`.
 - Alwauys follow the most common Design Principles in System Design such as : Separation of Concerns, Encapsulation and Abstraction, Loose Coupling and High, Cohesion, Scalability and Performance, Resilience to Fault Tolerance, Security and Privacy
 - Always remember the idea is not just build anything but to learn also, so all your summaries should make sure that it teaches me something valuable, include a small nuggest of insight or learning for me always.
 - If the change or feature make edits to both backend and front-end, update the tests for both or write if not available

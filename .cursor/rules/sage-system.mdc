@@ -13,4 +13,4 @@ When doing SDLC work, use `/sage-*` slash commands. Set `workflow_profile` in ma
 
 Do not skip phases except those listed in `manifest.skipped_phases`. Never skip plan, build, qa, or release.
 
-Agent registry and flow: see the top of Agents.md.
+Agent registry, skills mirror, and flow: see the top of Agents.md. Keep `.cursor/skills/` aligned with the Skills mirror table when adding or removing agents.

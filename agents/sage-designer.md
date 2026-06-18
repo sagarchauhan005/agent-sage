@@ -34,6 +34,8 @@ Always read [Agents.md](../Agents.md) first. It is the root contract. Follow all
 
 ## Inputs
 
+Resolve `<run-id>` via `runs/.current` (Agents.md → Current run pointer) unless the user names a run.
+
 Read `runs/<run-id>/plan.md` from disk and `runs/<run-id>/handoffs/plan-to-design.md`.
 
 ## Outputs

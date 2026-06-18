@@ -1,0 +1,28 @@
+{
+  "$schema": "../../runs/_manifest-template.schema.json",
+  "run_id": "2026-06-18-rate-limit-message",
+  "feature": "Rate limit error response leaks internal user ID",
+  "branch": "fix/rate-limit-message-leak",
+  "ticket": "",
+  "created_at": "2026-06-18T09:00:00Z",
+  "workflow_profile": "hotfix",
+  "phase": "done",
+  "phase_status": "completed",
+  "plan_mode": "completed",
+  "plan_file": "runs/2026-06-18-rate-limit-message/plan.md",
+  "route_after_plan": "build",
+  "skipped_phases": ["design", "architect", "devops"],
+  "qa_requires": ["build"],
+  "qa_next": "release",
+  "qa_handoff": "qa-to-release.md",
+  "completed_phases": ["plan", "build", "qa", "release"],
+  "gates": {
+    "push": "approved",
+    "pr": "approved",
+    "deploy": "skipped"
+  },
+  "agents": {
+    "current": "sage-release",
+    "next_command": "done"
+  }
+}

@@ -1,0 +1,111 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/sagar/agent-sage/runs/_manifest-template.schema.json",
+  "title": "Sage run manifest",
+  "description": "Schema for runs/<run-id>/manifest.json. See Agents.md and agents/sage-orchestrator.md.",
+  "type": "object",
+  "required": [
+    "run_id",
+    "feature",
+    "branch",
+    "workflow_profile",
+    "phase",
+    "phase_status",
+    "plan_mode",
+    "skipped_phases",
+    "qa_requires",
+    "qa_next",
+    "qa_handoff",
+    "completed_phases",
+    "gates",
+    "agents"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string" },
+    "run_id": {
+      "type": "string",
+      "pattern": "^([0-9]{4}-[0-9]{2}-[0-9]{2}-[a-z0-9-]+)?$",
+      "description": "YYYY-MM-DD-feature-slug; empty only in the unfilled template"
+    },
+    "feature": { "type": "string" },
+    "branch": { "type": "string" },
+    "ticket": { "type": "string" },
+    "created_at": { "type": "string" },
+    "workflow_profile": {
+      "type": "string",
+      "enum": [
+        "web-product",
+        "library-backend",
+        "backend-api",
+        "ui-feature",
+        "hotfix",
+        "spike",
+        "backend-module",
+        "ui-deploy",
+        "full-stack-no-deploy",
+        "api-hotfix",
+        "design-led"
+      ]
+    },
+    "phase": {
+      "type": "string",
+      "enum": ["plan", "design", "architect", "build", "qa", "devops", "release", "done"]
+    },
+    "phase_status": {
+      "type": "string",
+      "enum": ["pending", "in_progress", "completed", "failed"]
+    },
+    "plan_mode": {
+      "type": "string",
+      "enum": ["required", "completed"]
+    },
+    "plan_file": { "type": "string" },
+    "route_after_plan": {
+      "type": "string",
+      "enum": ["design", "architect", "build", ""]
+    },
+    "skipped_phases": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["design", "architect", "devops"]
+      }
+    },
+    "qa_requires": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "qa_next": {
+      "type": "string",
+      "enum": ["devops", "release"]
+    },
+    "qa_handoff": { "type": "string" },
+    "completed_phases": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["plan", "design", "architect", "build", "qa", "devops", "release"]
+      }
+    },
+    "gates": {
+      "type": "object",
+      "required": ["push", "pr", "deploy"],
+      "additionalProperties": false,
+      "properties": {
+        "push": { "type": "string", "enum": ["pending_user", "approved", "skipped"] },
+        "pr": { "type": "string", "enum": ["pending_user", "approved", "skipped"] },
+        "deploy": { "type": "string", "enum": ["pending_user", "approved", "skipped"] }
+      }
+    },
+    "agents": {
+      "type": "object",
+      "required": ["current", "next_command"],
+      "additionalProperties": false,
+      "properties": {
+        "current": { "type": "string" },
+        "next_command": { "type": "string" }
+      }
+    }
+  }
+}

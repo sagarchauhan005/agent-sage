@@ -36,7 +36,7 @@ Build command for all profiles: `/sage-engineer` (alias `/sage-build`). QA requi
 |------|------------|
 | `ui-feature` vs `design-led` vs `full-stack-no-deploy` | Same pipeline (no devops). Use `design-led` when a formal API contract in `architecture.md` matters; `ui-feature` for UI-heavy work; `full-stack-no-deploy` when naming intent as “PR only, hosting unchanged”. |
 | `hotfix` vs `spike` | Same path. Use `spike` when the plan marks throwaway/prototype scope and success criteria; `hotfix` for a small production fix. |
-| `library-backend` vs `backend-module` | Both skip design and devops. `library-backend` allows skipping architect when the plan is exhaustive (`architect?` in path). `backend-module` always includes architect for a shared lib/package with an architecture doc. |
+| `library-backend` vs `backend-module` | Both skip design and devops. `library-backend` allows skipping architect (`architect?` in path) only when it passes the decision rule in [agents/sage-planner.md](../agents/sage-planner.md) (all components named, no new integration, no schema change, plan within target length). `backend-module` always includes architect for a shared lib/package with an architecture doc. |
 
 ## Profile selection guide
 
