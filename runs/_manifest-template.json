@@ -11,9 +11,9 @@
   "plan_file": "",
   "route_after_plan": "",
   "skipped_phases": [],
-  "qa_requires": [],
-  "qa_next": "",
-  "qa_handoff": "",
+  "qa_requires": ["build"],
+  "qa_next": "devops",
+  "qa_handoff": "qa-to-devops.md",
   "completed_phases": [],
   "gates": {
     "push": "pending_user",

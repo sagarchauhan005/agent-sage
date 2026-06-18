@@ -11,9 +11,7 @@ Sage is your SDLC agent orchestration system. **Agents.md is the root contract.*
 | 1 Plan | Sage Planner | [agents/sage-planner.md](agents/sage-planner.md) | `/sage-plan` |
 | 2 Design | Sage Designer | [agents/sage-designer.md](agents/sage-designer.md) | `/sage-design` |
 | 3 Architect | Sage Architect | [agents/sage-architect.md](agents/sage-architect.md) | `/sage-architect` |
-| 4 Full-stack | Sage Full-stack | [agents/sage-fullstack.md](agents/sage-fullstack.md) | `/sage-fullstack` |
-| 4a Build | Sage Backend | [agents/sage-backend.md](agents/sage-backend.md) | `/sage-build-backend` |
-| 4b Build | Sage Frontend | [agents/sage-frontend.md](agents/sage-frontend.md) | `/sage-build-frontend` |
+| 4 Build | Sage Engineer | [agents/sage-engineer.md](agents/sage-engineer.md) | `/sage-engineer` (alias `/sage-build`) |
 | 5 Verify | Sage QA | [agents/sage-qa.md](agents/sage-qa.md) | `/sage-qa` |
 | 6 Package | Sage DevOps | [agents/sage-devops.md](agents/sage-devops.md) | `/sage-devops` |
 | 7 Ship | Sage Release | [agents/sage-release.md](agents/sage-release.md) | `/sage-release` |
@@ -24,19 +22,28 @@ Sage is your SDLC agent orchestration system. **Agents.md is the root contract.*
 
 Set `workflow_profile` in `runs/<run-id>/manifest.json`. See [workflows/profiles.md](workflows/profiles.md).
 
-The **orchestrator** owns the pipeline end to end. **Sage Full-stack** writes both backend and frontend code.
+The **orchestrator** owns the pipeline end to end. **Sage Engineer** implements the feature (full-stack scope per plan and profile).
 
 | Profile | Path |
 |---------|------|
-| `web-product` | plan → design → architect → fullstack → qa → devops → release |
-| `library-backend` | plan → architect? → build-backend → qa → release |
-| `backend-api` | plan → architect → build-backend → qa → devops → release |
-| `ui-feature` | plan → design → architect → build-frontend → qa → release |
+| `web-product` | plan → design → architect → build → qa → devops → release |
+| `library-backend` | plan → architect? → build → qa → release |
+| `backend-api` | plan → architect → build → qa → devops → release |
+| `ui-feature` | plan → design → architect → build → qa → release |
+| `hotfix` | plan → build → qa → release |
+| `spike` | plan → build → qa → release |
+| `backend-module` | plan → architect → build → qa → release |
+| `ui-deploy` | plan → design → build → qa → devops → release |
+| `full-stack-no-deploy` | plan → design → architect → build → qa → release |
+| `api-hotfix` | plan → build → qa → devops → release |
+| `design-led` | plan → design → architect → build → qa → release |
+
+See [workflows/profiles.md](workflows/profiles.md) for when to use each profile.
 
 ```
 /sage-orchestrator → plan (Plan mode → runs/<id>/plan.md)
                      profile sets which phases run or skip
-                     qa_requires: only completed build phases for that profile
+                     qa_requires: build.md must exist before QA
                      qa_next: devops OR release (qa-to-devops / qa-to-release)
                      ↑__________________________________________|  (loop back on failure)
 ```
@@ -108,7 +115,13 @@ If a project AGENTS.md or lockfile contradicts this table, follow the project.
 - Do not create unnecessary .sh or shell scripts for every automation unless required and asked explicitly
 
 
-##  Planning guidelines
+## Planning guidelines
+
+- Pick `workflow_profile` from [workflows/profiles.md](workflows/profiles.md); record it in `plan.md` and `manifest.json`.
+- Detect stack per Stack & language preferences above; do not suggest a language when the codebase already exists.
+- Set `route_after_plan` (`design`, `architect`, or `build`) and copy profile fields: `skipped_phases`, `qa_requires`, `qa_next`, `qa_handoff`.
+- For `spike`, mark throwaway scope and success criteria explicitly in the plan.
+- Always write the plan to `runs/<run-id>/plan.md` (exception to documentation folder rule).
 
 ## Designer (UI/UX) guidelines
 - All UI/UX design should be made in Shadcn or Tailwind only for any small module, or large feature
@@ -140,6 +153,7 @@ If a project AGENTS.md or lockfile contradicts this table, follow the project.
 
 ## DevOps guidelines
 
+- Hetzner server access: connect via the preconfigured SSH alias `ssh hetzner_agent`. Sage DevOps and Sage Engineer may use this for deploy prep, logs, and server-side debugging. Do not run destructive commands without explicit user approval.
 - All links for images, files or any static assets should always be referenced from a common config, array or some json that is easy to manage later
 - For all the features developed, tests should be written in parallel, follow TDD approach always
 - Since, I will always do docker based deployment, all my CI-CD pipelines should have front-end build done and synced to cloud storage during docker build stage only and not on CI-CD workflow stage and the front-end package may require composer or other setups too

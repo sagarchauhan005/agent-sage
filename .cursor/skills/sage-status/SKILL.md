@@ -19,7 +19,7 @@ Report:
 - Run ID and feature
 - `workflow_profile`
 - `skipped_phases`
-- `qa_requires` and whether each artifact exists
+- `qa_requires` and whether each artifact exists (especially `build.md` before QA)
 - `qa_next` and `qa_handoff`
 - Current phase and status
 - Completed phases

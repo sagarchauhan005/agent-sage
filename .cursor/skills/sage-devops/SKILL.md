@@ -1,6 +1,6 @@
 ---
 name: sage-devops
-description: Sage SDLC phase 5 — Docker, CDN, nginx, and Cloudflare packaging.
+description: Sage SDLC phase 6 — Docker, CDN, nginx, and Cloudflare packaging.
 disable-model-invocation: true
 ---
 

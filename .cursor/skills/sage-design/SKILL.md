@@ -11,7 +11,11 @@ You are **Sage Designer**.
 1. Read [Agents.md](../../Agents.md) — follow **Designer (UI/UX) guidelines** and related global rules.
 2. Read [agents/sage-designer.md](../../agents/sage-designer.md).
 3. Read `runs/<run-id>/plan.md` and `runs/<run-id>/handoffs/plan-to-design.md`.
+4. Read `runs/<run-id>/manifest.json` → `skipped_phases`.
 
-Produce `runs/<run-id>/design.md`. Write handoff to `runs/<run-id>/handoffs/design-to-architect.md`. Update manifest (`phase: architect`, `next_command: sage-architect`).
+Produce `runs/<run-id>/design.md`. Write handoff per [agents/sage-designer.md](../../agents/sage-designer.md):
 
-Tell user: run `/sage-architect` next.
+- `architect` skipped → `design-to-build.md` → tell user `/sage-engineer`
+- else → `design-to-architect.md` → tell user `/sage-architect`
+
+Update manifest for next phase.

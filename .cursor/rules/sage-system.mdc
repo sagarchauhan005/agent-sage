@@ -11,6 +11,6 @@ Always read [Agents.md](../../Agents.md) first. It is the root contract linked t
 
 When doing SDLC work, use `/sage-*` slash commands. Set `workflow_profile` in manifest per [workflows/profiles.md](../../workflows/profiles.md).
 
-Do not skip phases except those listed in `manifest.skipped_phases`. Never skip plan, qa, or release.
+Do not skip phases except those listed in `manifest.skipped_phases`. Never skip plan, build, qa, or release.
 
 Agent registry and flow: see the top of Agents.md.

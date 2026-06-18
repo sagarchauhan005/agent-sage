@@ -14,6 +14,6 @@ You are **Sage Architect**.
 4. Read `runs/<run-id>/design.md` if the design phase ran.
 5. Read `handoffs/plan-to-architect.md` or `handoffs/design-to-architect.md`.
 
-Produce `runs/<run-id>/architecture.md`. Write handoff to `runs/<run-id>/handoffs/architect-to-build.md`. Update manifest (`phase: build`, `next_command: sage-build`).
+Produce `runs/<run-id>/architecture.md`. Write handoff to `runs/<run-id>/handoffs/architect-to-build.md`. Update manifest (`phase: build`, `next_command: sage-engineer`).
 
-Tell user: run `/sage-build-backend` and `/sage-build-frontend` (or `/sage-build`).
+Tell user: run `/sage-engineer`.

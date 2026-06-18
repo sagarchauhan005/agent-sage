@@ -24,13 +24,14 @@ Stay in Plan mode until the local plan file is written. Do not implement code in
 3. Read [workflows/profiles.md](../../workflows/profiles.md).
 4. Create or load `runs/<run-id>/` with `manifest.json`.
 5. Set stack in `plan.md` per Agents.md **Stack & language preferences**.
-6. Set `workflow_profile` (`web-product`, `library-backend`, `backend-api`, `ui-feature`).
+6. Set `workflow_profile` from [workflows/profiles.md](../../workflows/profiles.md).
 7. Copy profile defaults: `skipped_phases`, `qa_requires`, `qa_next`, `qa_handoff`.
 8. Produce the plan in Plan mode.
 9. **Always** write the plan to disk: `runs/<run-id>/plan.md`.
 10. Write the matching handoff:
-   - UI / `ui-feature` / `web-product` → `plan-to-design.md` → `/sage-design`
-   - Architecture → `plan-to-architect.md` → `/sage-architect`
-   - Backend-only → `plan-to-build-backend.md` → `/sage-build-backend` (add `architect` to `skipped_phases` if applicable)
+   - UI profiles (`ui-feature`, `web-product`, `ui-deploy`, `full-stack-no-deploy`, `design-led`) → `plan-to-design.md` → `/sage-design`
+   - Architecture profiles → `plan-to-architect.md` → `/sage-architect`
+   - Build-only profiles (`hotfix`, `spike`, `api-hotfix`) → `plan-to-build.md` → `/sage-engineer`
+   - `library-backend` direct build → `plan-to-build.md` → `/sage-engineer` (add `architect` to `skipped_phases`)
 
 Tell user the local path to `plan.md`, the profile, stack section used, and the next command.

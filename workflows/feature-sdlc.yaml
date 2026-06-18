@@ -3,11 +3,10 @@
 #
 # Terminology:
 #   Orchestrator (sage-orchestrator) — owns the pipeline end to end
-#   Full-stack (sage-fullstack)       — builds BOTH backend and frontend code
-#   web-product profile               — full web SDLC; uses sage-fullstack for build
+#   Engineer (sage-engineer)         — implements full-stack (scope per plan/profile)
 
 name: sage-feature-sdlc
-version: 3
+version: 5
 
 run_dir: runs/{run_id}
 manifest: runs/{run_id}/manifest.json
@@ -15,11 +14,11 @@ handoff_dir: runs/{run_id}/handoffs
 
 profiles:
   web-product:
-    description: Web product feature — orchestrator drives full SDLC; full-stack agent builds UI + API
+    description: Web product feature — full SDLC; engineer builds UI + API
     default_route_after_plan: design
-    phases: [plan, design, architect, build-fullstack, qa, devops, release]
-    skipped_phases: [build-backend, build-frontend]
-    qa_requires: [build-fullstack]
+    phases: [plan, design, architect, build, qa, devops, release]
+    skipped_phases: []
+    qa_requires: [build]
     qa_next: devops
     qa_handoff: qa-to-devops.md
 
@@ -27,28 +26,90 @@ profiles:
     description: Backend library or module — no UI, no deploy phase
     default_route_after_plan: architect
     architect_optional: true
-    phases: [plan, architect, build-backend, qa, release]
-    skipped_phases: [design, build-frontend, build-fullstack, devops]
-    qa_requires: [build-backend]
+    phases: [plan, architect, build, qa, release]
+    skipped_phases: [design, devops]
+    qa_requires: [build]
     qa_next: release
     qa_handoff: qa-to-release.md
 
   backend-api:
-    description: API or backend service — deploy packaging, no UI
+    description: API or backend service — deploy packaging, no UI design phase
     default_route_after_plan: architect
-    phases: [plan, architect, build-backend, qa, devops, release]
-    skipped_phases: [design, build-frontend, build-fullstack]
-    qa_requires: [build-backend]
+    phases: [plan, architect, build, qa, devops, release]
+    skipped_phases: [design]
+    qa_requires: [build]
     qa_next: devops
     qa_handoff: qa-to-devops.md
 
   ui-feature:
-    description: Frontend-heavy feature — design and frontend build only
+    description: Frontend-heavy feature — design + build, no devops
     default_route_after_plan: design
-    build_backend_optional: true
-    phases: [plan, design, architect, build-frontend, qa, release]
-    skipped_phases: [build-fullstack, build-backend, devops]
-    qa_requires: [build-frontend]
+    phases: [plan, design, architect, build, qa, release]
+    skipped_phases: [devops]
+    qa_requires: [build]
+    qa_next: release
+    qa_handoff: qa-to-release.md
+
+  hotfix:
+    description: One-line fix, config tweak, typo, dependency patch
+    default_route_after_plan: build
+    phases: [plan, build, qa, release]
+    skipped_phases: [design, architect, devops]
+    qa_requires: [build]
+    qa_next: release
+    qa_handoff: qa-to-release.md
+
+  spike:
+    description: Time-boxed prototype — throwaway scope; same path as hotfix
+    default_route_after_plan: build
+    phases: [plan, build, qa, release]
+    skipped_phases: [design, architect, devops]
+    qa_requires: [build]
+    qa_next: release
+    qa_handoff: qa-to-release.md
+
+  backend-module:
+    description: Shared lib/package with arch doc, no Docker/deploy
+    default_route_after_plan: architect
+    phases: [plan, architect, build, qa, release]
+    skipped_phases: [design, devops]
+    qa_requires: [build]
+    qa_next: release
+    qa_handoff: qa-to-release.md
+
+  ui-deploy:
+    description: New UI surface needing CDN/Docker — no formal architecture doc
+    default_route_after_plan: design
+    phases: [plan, design, build, qa, devops, release]
+    skipped_phases: [architect]
+    qa_requires: [build]
+    qa_next: devops
+    qa_handoff: qa-to-devops.md
+
+  full-stack-no-deploy:
+    description: Full feature on branch/PR only — hosting unchanged
+    default_route_after_plan: design
+    phases: [plan, design, architect, build, qa, release]
+    skipped_phases: [devops]
+    qa_requires: [build]
+    qa_next: release
+    qa_handoff: qa-to-release.md
+
+  api-hotfix:
+    description: Production API fix with deploy — skip design and architect
+    default_route_after_plan: build
+    phases: [plan, build, qa, devops, release]
+    skipped_phases: [design, architect]
+    qa_requires: [build]
+    qa_next: devops
+    qa_handoff: qa-to-devops.md
+
+  design-led:
+    description: UI-heavy change with formal API contract in architecture doc
+    default_route_after_plan: design
+    phases: [plan, design, architect, build, qa, release]
+    skipped_phases: [devops]
+    qa_requires: [build]
     qa_next: release
     qa_handoff: qa-to-release.md
 
@@ -63,11 +124,11 @@ phases:
     handoff_options:
       - plan-to-design.md
       - plan-to-architect.md
-      - plan-to-build-backend.md
+      - plan-to-build.md
     next_options:
       - design
       - architect
-      - build-backend
+      - build
     skippable: false
 
   - id: design
@@ -76,7 +137,13 @@ phases:
     command: sage-design
     artifact: design.md
     handoff: design-to-architect.md
+    handoff_options:
+      - design-to-architect.md
+      - design-to-build.md
     next: architect
+    next_options:
+      - architect
+      - build
     requires: [plan]
     skippable: true
 
@@ -91,38 +158,16 @@ phases:
     optional: [design]
     skippable: true
 
-  - id: build-fullstack
+  - id: build
     order: 4
-    agent: sage-fullstack
-    command: sage-fullstack
-    artifact: build-fullstack.md
-    handoff: build-fullstack-to-qa.md
-    next: qa
-    requires: [plan, architect]
-    optional: [design]
-    skippable: true
-
-  - id: build-backend
-    order: 4
-    agent: sage-backend
-    command: sage-build-backend
-    artifact: build-backend.md
-    handoff: build-backend-to-qa.md
-    next: qa
-    requires: [plan]
-    optional: [architect]
-    skippable: true
-
-  - id: build-frontend
-    order: 4
-    agent: sage-frontend
-    command: sage-build-frontend
-    artifact: build-frontend.md
-    handoff: build-frontend-to-qa.md
+    agent: sage-engineer
+    command: sage-engineer
+    artifact: build.md
+    handoff: build-to-qa.md
     next: qa
     requires: [plan]
     optional: [design, architect]
-    skippable: true
+    skippable: false
 
   - id: qa
     order: 5
