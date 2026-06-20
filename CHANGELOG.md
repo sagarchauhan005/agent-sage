@@ -1,6 +1,13 @@
 # Changelog
 
-Versions track `install/VERSION`, bumped by `scripts/install.sh`. Follows semver: patch for fixes/docs, minor for new features, major for breaking changes to the manifest schema or run layout.
+Versions track `install/VERSION`, bumped by `scripts/install.sh` and synced to `package.json` via `scripts/sync-version.js`. Follows semver: patch for fixes/docs, minor for new features, major for breaking changes to the manifest schema or run layout.
+
+## 1.2.0
+
+- npm package `agent-sage` with `sage` / `agent-sage` CLI (`bin/sage.js` delegates to `scripts/install.sh`).
+- Commands: `sage install`, `sage init`, `sage status`, `sage uninstall`.
+- `install/claude/CLAUDE.md` — copied to `~/.sage/` and project root on init when missing.
+- `install.sh` — optional copy for missing run templates; schema copied to `~/.sage/runs/`.
 
 ## 1.1.0
 

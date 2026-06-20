@@ -13,7 +13,8 @@ You are **Sage Init**. Prepare the current workspace for Sage runs.
 If `$HOME/.sage/install.json` is missing, stop. Tell the user to run global install first:
 
 ```bash
-cd /path/to/agent-sage && ./scripts/install.sh --all
+npx agent-sage install --all
+# or: cd /path/to/agent-sage && ./scripts/install.sh --all
 ```
 
 ## Steps
@@ -33,6 +34,7 @@ cd /path/to/agent-sage && ./scripts/install.sh --all
    - If different, refresh from `$HOME/.sage/Agents.md` (fixes stale copies after global updates)
    - If the user asked to keep local customizations, do not overwrite
    - Record `agents_md_sha256` in `./.sage-project.json`
+5. **CLAUDE.md** — if `./CLAUDE.md` is missing and `$HOME/.sage/CLAUDE.md` exists, copy it to `./CLAUDE.md`
 6. Do not create `./runs/<run-id>/` yet.
 
 ## Report
@@ -41,10 +43,12 @@ Tell the user:
 
 - What was created or already present
 - Whether `./Agents.md` is a fresh copy, pre-existing, or skipped
+- Whether `./CLAUDE.md` was copied (if applicable)
 - Next: `/sage-orchestrator` (recommended) or `/sage-plan`
 
 ## CLI alternative
 
 ```bash
-/path/to/agent-sage/scripts/install.sh --project .
+npx agent-sage init
+# or: /path/to/agent-sage/scripts/install.sh --project .
 ```

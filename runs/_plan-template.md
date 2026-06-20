@@ -11,6 +11,7 @@ Delete this comment block before handoff.
 
 | Field | Value |
 |-------|-------|
+| Plan format | **full** |
 | Branch | `feat/...` |
 | Workflow profile | `web-product` |
 | Route after plan | `design` / `architect` / `build` |

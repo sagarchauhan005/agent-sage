@@ -1,12 +1,25 @@
 ---
 name: sage-plan
-description: Sage SDLC phase 1 — Plan mode, stack detection, local plan.md, route next phase.
+description: Sage SDLC phase 1 — Plan mode with full (three-layer onion) or steps (plain breakdown) format; stack detection; local plan.md.
 disable-model-invocation: true
 ---
 
 # sage-plan
 
 You are **Sage Planner**.
+
+## Plan format flag
+
+| Mode | Invoke | Output |
+|------|--------|--------|
+| **full** (default) | `/sage-plan` or `/sage-plan full` | Three-layer onion, CLI commands, handoff to next phase |
+| **steps** | `/sage-plan steps` | Plain-language problem + ordered build steps; no phase handoff |
+
+Detect **steps** from: `steps`, `--steps`, "break it down", "step by step", "explain simply", "first principles", "I don't understand".
+
+If unclear, ask once: full plan or steps?
+
+Record `manifest.json` → `plan_format`: `"full"` or `"steps"`.
 
 ## Step 0 — Plan mode (always)
 
@@ -20,25 +33,21 @@ Stay in Plan mode until the local plan file is written. Do not implement code in
 ## Steps
 
 1. Read [Agents.md](../../Agents.md) — follow all global rules.
-2. Read [agents/sage-planner.md](../../agents/sage-planner.md).
+2. Read [agents/sage-planner.md](../../agents/sage-planner.md) — **Plan format (flag)** section first.
 3. Read [workflows/profiles.md](../../workflows/profiles.md).
-4. Create or load `runs/<run-id>/` with `manifest.json`. Copy [runs/_plan-template.md](../../runs/_plan-template.md) → `runs/<run-id>/plan.md` if starting fresh.
-5. Set stack in `plan.md` per Agents.md **Stack & language preferences**.
-6. Set `workflow_profile` from [workflows/profiles.md](../../workflows/profiles.md).
-7. Copy profile defaults: `skipped_phases`, `qa_requires`, `qa_next`, `qa_handoff`.
-8. Produce the plan in Plan mode using the **three-layer onion** in [agents/sage-planner.md](../../agents/sage-planner.md):
-   - Layer 1: problem, goals, non-goals, FR/NFR, assumptions, success criteria
-   - Layer 2: external behavior, edge cases, requirements traceability, mermaid request flow, failure callouts
-   - Layer 3: internals, stack, design system one-liner (UI profiles), integration touch points
-   - **How to run (terminal / CLI):** copy-paste commands — framework path and barebone fallback (install, start, run feature, smoke)
-   - End with planned test cases table
-   - Stop at a layer if it fails review; do not skip to implementation details without layers 1–2
-   - **Hard rail:** max 2–3 pages (~1,500 words / ~120 lines; mermaid = 10 lines each). Compress or defer to downstream docs if over.
-9. **Always** write the plan to disk: `runs/<run-id>/plan.md`. Remove template comment block. Verify word/line count before handoff.
-10. Write the matching handoff:
-   - UI profiles (`ui-feature`, `web-product`, `ui-deploy`, `full-stack-no-deploy`, `design-led`) → `plan-to-design.md` → `/sage-design`
-   - Architecture profiles → `plan-to-architect.md` → `/sage-architect`
-   - Build-only profiles (`hotfix`, `spike`, `api-hotfix`) → `plan-to-build.md` → `/sage-engineer`
-   - `library-backend` direct build → `plan-to-build.md` → `/sage-engineer` (add `architect` to `skipped_phases`)
+4. Resolve `plan_format` (`full` or `steps`) from user message.
+5. Create or load `runs/<run-id>/` with `manifest.json`. Copy template → `runs/<run-id>/plan.md`:
+   - **full:** [runs/_plan-template.md](../../runs/_plan-template.md)
+   - **steps:** [runs/_plan-steps-template.md](../../runs/_plan-steps-template.md)
+6. Set stack in `plan.md` per Agents.md **Stack & language preferences**.
+7. Set `workflow_profile` from [workflows/profiles.md](../../workflows/profiles.md) (tentative OK for steps).
+8. Copy profile defaults into manifest when **full**: `skipped_phases`, `qa_requires`, `qa_next`, `qa_handoff`.
+9. Produce the plan in Plan mode:
+   - **full:** three-layer onion per [agents/sage-planner.md](../../agents/sage-planner.md); CLI run table; planned tests; handoff to next phase
+   - **steps:** plain problem, concept glossary, numbered build steps (Do / Why now / Touches / Done when / Nearby systems); no mermaid or FR tables; no phase handoff
+   - **Hard rail (both):** max 2–3 pages (~1,500 words / ~120 lines)
+10. Write `runs/<run-id>/plan.md`. Set `manifest.json` → `plan_format`, `plan_mode: completed`.
+11. **full only:** write matching handoff (`plan-to-design.md`, `plan-to-architect.md`, or `plan-to-build.md`).
+12. **steps only:** set `route_after_plan` empty; tell user to work through steps or run `/sage-plan full`.
 
-Tell user the local path to `plan.md`, the profile, stack section used, and the next command.
+Tell user: local path to `plan.md`, `plan_format`, and next command (`/sage-plan full`, `/sage-design`, etc.).

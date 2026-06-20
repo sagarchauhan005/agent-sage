@@ -58,7 +58,14 @@ install_core() {
   cp -R "$REPO_ROOT/agents/." "$SAGE_HOME/agents/"
   cp -R "$REPO_ROOT/workflows/." "$SAGE_HOME/workflows/"
   cp "$REPO_ROOT/runs/_plan-template.md" "$SAGE_HOME/runs/_plan-template.md"
+  if [[ -f "$REPO_ROOT/runs/_plan-steps-template.md" ]]; then
+    cp "$REPO_ROOT/runs/_plan-steps-template.md" "$SAGE_HOME/runs/_plan-steps-template.md"
+  fi
   cp "$REPO_ROOT/runs/_manifest-template.json" "$SAGE_HOME/runs/_manifest-template.json"
+  if [[ -f "$REPO_ROOT/runs/_manifest-template.schema.json" ]]; then
+    cp "$REPO_ROOT/runs/_manifest-template.schema.json" "$SAGE_HOME/runs/_manifest-template.schema.json"
+  fi
+  cp "$REPO_ROOT/install/claude/CLAUDE.md" "$SAGE_HOME/CLAUDE.md"
   cp "$REPO_ROOT/install/VERSION" "$SAGE_HOME/VERSION"
 
   python3 "$GENERATOR" "$SOURCE_SKILLS" "$SAGE_HOME/skills"
@@ -217,6 +224,11 @@ PY
   if [[ "$agents_action" == "refreshed" ]]; then
     warn "If you customized Agents.md, restore from git or add overrides below a project-specific section."
   fi
+
+  if [[ "$copy_agents" == "yes" && -f "$SAGE_HOME/CLAUDE.md" && ! -f "$project_dir/CLAUDE.md" ]]; then
+    cp "$SAGE_HOME/CLAUDE.md" "$project_dir/CLAUDE.md"
+    log "Copied CLAUDE.md → $project_dir/CLAUDE.md"
+  fi
 }
 
 install_tools() {
@@ -368,7 +380,7 @@ main() {
         esac
       done
       if [[ ! -f "$SAGE_HOME/install.json" ]]; then
-        err "Global Sage not installed. Run: $(basename "$0") --all"
+        err "Global Sage not installed. Run: sage install --all  (or npx agent-sage install --all)"
         exit 1
       fi
       bootstrap_project "$project_dir" "$copy_agents"

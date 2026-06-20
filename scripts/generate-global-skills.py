@@ -15,7 +15,7 @@ PATHS_HEADER = """\
 - **Root contract:** read `./Agents.md` at workspace root if present, else `$HOME/.sage/Agents.md`
 - **Role files:** `$HOME/.sage/agents/<name>.md`
 - **Workflows:** `$HOME/.sage/workflows/`
-- **Run templates:** `$HOME/.sage/runs/_plan-template.md`, `_manifest-template.json`
+- **Run templates:** `$HOME/.sage/runs/_plan-template.md`, `_plan-steps-template.md`, `_manifest-template.json`
 - **Run artifacts:** always under `./runs/<run-id>/` in the workspace (create the folder if missing)
 
 """
@@ -36,6 +36,10 @@ LINK_REPLACEMENTS: list[tuple[str, str]] = [
     (
         r"\[runs/_plan-template\.md\]\(\../../runs/_plan-template\.md\)",
         "`$HOME/.sage/runs/_plan-template.md`",
+    ),
+    (
+        r"\[runs/_plan-steps-template\.md\]\(\../../runs/_plan-steps-template\.md\)",
+        "`$HOME/.sage/runs/_plan-steps-template.md`",
     ),
     (
         r"\[runs/_manifest-template\.json\]\(\../../runs/_manifest-template\.json\)",

@@ -9,6 +9,7 @@
   "phase": "plan",
   "phase_status": "pending",
   "plan_mode": "required",
+  "plan_format": "full",
   "plan_file": "",
   "route_after_plan": "",
   "skipped_phases": [],

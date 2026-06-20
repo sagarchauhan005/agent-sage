@@ -27,16 +27,6 @@ If `devops` is in `manifest.skipped_phases`, this phase does not run. QA hands o
 
 **Success looks like:** Deploy report shows what changed, what's synced, and whether staging/prod deploy is ready — with explicit user gate before deploy.
 
-## Server access
-
-Connect to the Hetzner server via the preconfigured SSH alias:
-
-```bash
-ssh hetzner_agent
-```
-
-Use for deploy prep, container/nginx checks, logs, and CDN sync verification. Stop for user approval before any deploy or destructive server change.
-
 ## Inheritance
 
 Always read [Agents.md](../Agents.md) first. It is the root contract. Follow all global rules there, especially:

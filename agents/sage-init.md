@@ -27,7 +27,8 @@ Global Sage must be installed:
 If missing, stop and tell the user to run:
 
 ```bash
-cd /path/to/agent-sage && ./scripts/install.sh --all
+npx agent-sage install --all
+# or: cd /path/to/agent-sage && ./scripts/install.sh --all
 ```
 
 ## Bootstrap steps (workspace root)
@@ -47,15 +48,17 @@ cd /path/to/agent-sage && ./scripts/install.sh --all
    - If hashes match, leave unchanged
    - If the user said to keep local customizations, do not overwrite; warn they may be on an old contract
    - Store `agents_md_sha256` in `./.sage-project.json` after copy or refresh
-5. Do not create `./runs/<run-id>/` yet — that happens at `/sage-orchestrator` or `/sage-plan`.
-6. Report a short summary: paths created, Agents.md source (local copy vs pre-existing), and recommended next command.
+5. **CLAUDE.md** — if `./CLAUDE.md` is missing and `$HOME/.sage/CLAUDE.md` exists, copy it to `./CLAUDE.md` (Claude Code root contract pointer).
+6. Do not create `./runs/<run-id>/` yet — that happens at `/sage-orchestrator` or `/sage-plan`.
+7. Report a short summary: paths created, Agents.md source (local copy vs pre-existing), and recommended next command.
 
 ## CLI alternative
 
 The user may run instead:
 
 ```bash
-/path/to/agent-sage/scripts/install.sh --project .
+npx agent-sage init
+# or: /path/to/agent-sage/scripts/install.sh --project .
 ```
 
 Optional flags handled by the script: `--copy-agents-md` (default on), `--no-agents-md` to skip copying.
@@ -65,5 +68,5 @@ Optional flags handled by the script: `--copy-agents-md` (default on), `--no-age
 No handoff file. Tell user:
 
 - First feature run: `/sage-orchestrator` (full pipeline) or `/sage-plan` (jump to planning)
-- Check global install: `./scripts/install.sh --status` from agent-sage repo
-- Refresh global skills and Agents.md after agent-sage updates: `./scripts/install.sh --all`, then `/sage-init` in each project (refreshes stale `./Agents.md` automatically)
+- Check global install: `sage status` or `npx agent-sage status`
+- Refresh global skills and Agents.md after agent-sage updates: `sage install --all`, then `/sage-init` in each project (refreshes stale `./Agents.md` automatically)

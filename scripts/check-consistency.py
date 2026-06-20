@@ -63,17 +63,20 @@ def parse_profiles(yaml_text):
     return profiles
 
 
-def extract_table(text, header_contains):
+def extract_table(text, *header_parts):
     """Return list of rows (each a list of cell strings) for the markdown table
-    whose header line contains `header_contains`."""
+    whose header line contains every string in header_parts."""
+    if not header_parts:
+        raise ValueError("extract_table requires at least one header part")
+
     lines = text.splitlines()
     start = None
     for i, line in enumerate(lines):
-        if line.strip().startswith("|") and header_contains in line:
+        if line.strip().startswith("|") and all(part in line for part in header_parts):
             start = i
             break
     if start is None:
-        raise ValueError(f"could not find table header containing {header_contains!r}")
+        raise ValueError(f"could not find table header containing {header_parts!r}")
 
     rows = []
     for line in lines[start + 2:]:
@@ -105,7 +108,7 @@ def pipeline_string(phases, architect_optional):
 
 
 def check_agents_md_sdlc_flow(profiles, text, errors):
-    rows = extract_table(text, "| Profile | Path |")
+    rows = extract_table(text, "Profile", "Path")
     seen = set()
     for cells in rows:
         if len(cells) < 2:
@@ -124,7 +127,7 @@ def check_agents_md_sdlc_flow(profiles, text, errors):
 
 
 def check_profiles_md(profiles, text, errors):
-    rows = extract_table(text, "| Profile ")
+    rows = extract_table(text, "Profile", "Pipeline")
     seen = set()
     for cells in rows:
         if len(cells) < 4:
@@ -154,7 +157,7 @@ def check_profiles_md(profiles, text, errors):
 
 
 def check_orchestrator_md(profiles, text, errors):
-    rows = extract_table(text, "| Profile | Skipped phases | Build command | QA requires | QA next |")
+    rows = extract_table(text, "Profile", "Skipped phases", "Build command", "QA requires", "QA next")
     seen = set()
     for cells in rows:
         if len(cells) < 5:
@@ -185,7 +188,7 @@ def check_orchestrator_md(profiles, text, errors):
 
 
 def check_planner_md(profiles, text, errors):
-    rows = extract_table(text, "| Profile | When | Default route after plan |")
+    rows = extract_table(text, "Profile", "When", "Default route after plan")
     seen = set()
     for cells in rows:
         if len(cells) < 3:
@@ -204,7 +207,7 @@ def check_planner_md(profiles, text, errors):
 
 
 def check_skills_mirror(text, errors):
-    rows = extract_table(text, "| Skill folder | Slash command | Agent file |")
+    rows = extract_table(text, "Skill folder", "Slash command", "Agent file")
     documented = set()
     for cells in rows:
         if len(cells) < 1:

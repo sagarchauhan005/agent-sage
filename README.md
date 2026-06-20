@@ -1,138 +1,154 @@
 # Agent Sage
 
-**Agent Sage** is an SDLC orchestration system for AI coding agents (Cursor, Claude Code, Codex). It turns ad-hoc agent sessions into a repeatable pipeline: plan → design → architect → build → QA → devops → release — with profile-aware phase skipping, structured handoffs, and a single root contract.
+SDLC orchestration for AI coding agents (Cursor, Claude Code, Codex). Turn ad-hoc agent sessions into a repeatable pipeline: plan, design, architect, build, QA, devops, release.
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![npm version](https://img.shields.io/npm/v/agent-sage.svg)](https://www.npmjs.com/package/agent-sage)
+
+**Repo:** https://github.com/sagarchauhan005/agent-sage
 
 ## What it does
 
-- **Routes work through phase agents** — each phase has a role file, slash command, and expected artifacts on disk.
-- **Skips phases by profile** — hotfixes skip design and architect; UI deploys skip architect; library work skips design and devops. Plan, build, QA, and release always run.
-- **Keeps one source of truth** — [`Agents.md`](Agents.md) holds global rules (stack preferences, coding practices, gates). Phase agents inherit from it; they do not duplicate best practices.
-- **Persists run state locally** — every feature run lives under `runs/<run-id>/` with `manifest.json`, phase artifacts, and handoff markdown between agents.
-- **Enforces gates** — push, PR, and deploy require explicit user approval before Release or DevOps proceed.
+- Routes work through phase agents, each with a role file, slash command, and artifacts on disk
+- Skips phases by workflow profile (hotfix, ui-deploy, library-backend, and others)
+- Keeps one root contract in [`Agents.md`](Agents.md) that every agent inherits
+- Persists run state under `runs/<run-id>/` with manifest, handoffs, and phase outputs
+- Enforces gates before push, PR, or deploy
 
-## Quick start
+Plan, build, QA, and release always run. Design, architect, and devops are profile-dependent.
 
-1. Copy or clone this repo into your project (or use it as the project root).
-2. Read [`Agents.md`](Agents.md) — the root contract for all agents.
-3. **Global install (one time):** run `./scripts/install.sh --all` from the agent-sage repo. Skills land in `~/.sage/` and link into Cursor, Claude, and Codex.
-4. **New project (first time per repo):** run `/sage-init` in the project (or `./scripts/install.sh --project .` from agent-sage). Creates `./runs/` and optional `./Agents.md`.
-5. Start a run with `/sage-orchestrator` or go straight to `/sage-plan`.
-6. Pick a **workflow profile** (see [`workflows/profiles.md`](workflows/profiles.md)) — e.g. `web-product`, `hotfix`, `ui-deploy`.
-7. Follow the next `/sage-*` command the orchestrator or phase agent tells you.
+## Install
 
-### Global install
+Requires **bash**, **python3**, and **Node.js 18+**.
 
 ```bash
+npx agent-sage install --all    # once per machine
+cd your-project
+npx agent-sage init             # ./runs/, Agents.md, CLAUDE.md
+```
+
+Global install: `npm install -g agent-sage`, then `sage install --all` and `sage init`.
+
+From a git clone:
+
+```bash
+git clone https://github.com/sagarchauhan005/agent-sage.git
 cd agent-sage
-./scripts/install.sh          # interactive: Cursor / Claude / Codex
-./scripts/install.sh --all    # all three tools
-./scripts/install.sh --project /path/to/your-app   # CLI equivalent of /sage-init
-./scripts/install.sh --project . --no-agents-md    # skip local Agents.md copy
-./scripts/install.sh --status
-./scripts/install.sh --uninstall
+./scripts/install.sh --all
+./scripts/install.sh --project /path/to/your-app
 ```
 
-What gets installed:
+### What gets installed
 
-| Location | Contents |
-|----------|----------|
-| `~/.sage/` | Agents.md, agents/, workflows/, run templates, generated skills |
-| `~/.cursor/skills/sage-*` | Symlinks (when Cursor selected) |
-| `~/.claude/skills/sage-*` | Symlinks (when Claude selected) |
-| `~/.codex/skills/sage-*` | Symlinks (when Codex selected) |
+| Location                  | Contents                                              |
+| ------------------------- | ----------------------------------------------------- |
+| `~/.sage/`                | Agents.md, agents/, workflows/, templates, skills     |
+| `~/.cursor/skills/sage-*` | Symlinks when Cursor is selected                      |
+| `~/.claude/skills/sage-*` | Symlinks when Claude Code is selected                 |
+| `~/.codex/skills/sage-*`  | Symlinks when Codex is selected                       |
+| `./runs/` (per project)   | Feature run artifacts (`manifest.json`, handoffs, …)  |
 
-Run artifacts always live in `./runs/<run-id>/` inside the project you are working on. Run `/sage-init` once per repo (or `--project`) before the first `/sage-plan`.
+## Usage
 
-### Example — hotfix
+Start in any bootstrapped project:
 
 ```bash
-/sage-plan      → writes runs/<id>/plan.md (Plan mode)
-/sage-engineer  → implements fix, writes build.md
-/sage-qa        → tests, writes test-report.md
-/sage-release   → commit, branch, PR (with your approval)
+/sage-orchestrator    # create or resume a run
+/sage-plan            # jump straight to planning (Plan mode)
+/sage-status          # snapshot of current run
 ```
 
-### Example — full web feature
+Pick a **workflow profile** in the plan or manifest. See [`workflows/profiles.md`](workflows/profiles.md).
 
-```bash
+### Hotfix example
+
+```
+/sage-plan → /sage-engineer → /sage-qa → /sage-release
+```
+
+### Full web feature
+
+```
 /sage-plan → /sage-design → /sage-architect → /sage-engineer → /sage-qa → /sage-devops → /sage-release
 ```
 
-## Slash commands
+## Agents
 
-| Command | Phase |
-|---------|-------|
-| `/sage-init` | Bootstrap ./runs/ in a new project |
-| `/sage-orchestrator` | Create or resume a run; route the pipeline |
-| `/sage-status` | Read-only snapshot of run state |
-| `/sage-plan` | Plan mode → local `plan.md` |
-| `/sage-design` | UI/UX spec |
-| `/sage-architect` | Schemas and system design |
-| `/sage-engineer` | Full-stack implementation (alias `/sage-build`) |
-| `/sage-qa` | Lint and tests |
-| `/sage-devops` | Docker, CDN, nginx packaging |
-| `/sage-release` | Commit, push, PR |
-| `/sage-handoff` | Write or validate a phase handoff |
+| Agent              | Slash command        | Primary role  |
+| ------------------ | -------------------- | ------------- |
+| Sage Orchestrator  | `/sage-orchestrator` | Orchestrate   |
+| Sage Planner       | `/sage-plan`         | Plan          |
+| Sage Designer      | `/sage-design`       | Design        |
+| Sage Architect     | `/sage-architect`    | Architect     |
+| Sage Engineer      | `/sage-engineer`     | Build         |
+| Sage QA            | `/sage-qa`           | Verify        |
+| Sage DevOps        | `/sage-devops`       | Package       |
+| Sage Release       | `/sage-release`      | Ship          |
+| Sage Init          | `/sage-init`         | Bootstrap     |
+| Sage Status        | `/sage-status`       | Status        |
+| Sage Handoff       | `/sage-handoff`      | Handoff       |
 
-Skills live in [`.cursor/skills/sage-*/`](.cursor/skills/). Cursor loads them when you invoke the matching slash command.
+Full registry and skills mirror: [`Agents.md`](Agents.md).
+
+## CLI reference
+
+```bash
+sage install [--all | --cursor | --claude | --codex]
+sage init [DIR] [--no-agents-md]
+sage status
+sage uninstall
+```
 
 ## Repository layout
 
 ```
-Agents.md                 # Root contract — read first
-CLAUDE.md                 # Points Claude Code at Agents.md (Cursor's rule is always-on already)
-CHANGELOG.md              # Versioned changes, tracks install/VERSION
-LICENSE                   # MIT
-agents/                   # Phase agent role files (sage-planner, sage-engineer, …)
-workflows/
-  feature-sdlc.yaml       # Machine-readable profile definitions (canonical)
-  profiles.md             # Human guide — when to use each profile
-runs/                     # Per-feature run artifacts (manifest, plan, handoffs)
-  _plan-template.md       # Copy to runs/<run-id>/plan.md (2–3 page max)
-  _manifest-template.json       # Copy to runs/<run-id>/manifest.json
-  _manifest-template.schema.json # JSON Schema for manifest.json
-  .current                # Active run-id pointer (gitignored, local state)
-examples/                 # Worked run showing expected artifact density/format
-scripts/
-  install.sh              # Global install for Cursor / Claude / Codex
-  check-consistency.py    # Verifies profile tables agree with feature-sdlc.yaml
-  generate-global-skills.py
-  tests/                  # pytest suite for the scripts above
-install/                  # Files copied into ~/.sage by install.sh (VERSION, cursor rule)
-.cursor/
-  rules/sage-system.mdc   # Always-on Cursor rule
-  skills/sage-*/          # Slash command definitions
-.github/workflows/ci.yml  # Consistency check, pytest, shellcheck
+Agents.md              # Root contract — read first
+agents/                # Phase agent role files
+workflows/             # Profiles (YAML + human guide)
+runs/                  # Run templates (artifacts live per project)
+.cursor/skills/        # Slash command skill definitions
+bin/sage.js            # npm CLI entry
+scripts/install.sh     # Global installer
+examples/              # Worked hotfix run
 ```
+
+Worked example: [`examples/hotfix-rate-limit-message/`](examples/hotfix-rate-limit-message/).
 
 ## Workflow profiles
 
-Eleven profiles control which phases run. Common ones:
+| Profile              | Use when                          |
+| -------------------- | --------------------------------- |
+| `web-product`        | UI + API + deploy                 |
+| `hotfix`             | Small fix, no design/architect    |
+| `ui-deploy`          | UI with CDN/Docker, no architect  |
+| `library-backend`    | Library/CLI, optional architect   |
+| `spike`              | Time-boxed throwaway prototype    |
 
-| Profile | Use when |
-|---------|----------|
-| `web-product` | UI + API + deploy |
-| `hotfix` | Small fix, no design/architect |
-| `ui-deploy` | New UI with CDN/Docker, no architecture doc |
-| `library-backend` | Library/CLI, optional architect |
-| `spike` | Time-boxed throwaway prototype |
-
-Full list and routing rules: [`workflows/profiles.md`](workflows/profiles.md).
-
-Worked example (`hotfix` profile, full plan → build → qa → release artifacts): [`examples/hotfix-rate-limit-message/`](examples/hotfix-rate-limit-message/).
+All eleven profiles: [`workflows/profiles.md`](workflows/profiles.md).
 
 ## Design principles
 
-1. **Agents.md is the root** — global rules live there; agents reference sections by name.
-2. **Artifacts on disk, not chat** — downstream agents read `runs/<run-id>/` files, not conversation history.
-3. **Orchestrator owns the pipeline** — Sage Engineer implements; Release owns git push/PR.
-4. **Profile-driven skips** — never skip plan, build, QA, or release.
-5. **Handoffs are explicit** — templated markdown in `runs/<run-id>/handoffs/`.
+1. **Agents.md is the root** — global rules live there; agents reference sections by name
+2. **Artifacts on disk, not chat** — downstream agents read `runs/<run-id>/`, not conversation history
+3. **Orchestrator owns the pipeline** — Engineer implements; Release owns git push/PR
+4. **Profile-driven skips** — never skip plan, build, QA, or release
+5. **Handoffs are explicit** — templated markdown in `runs/<run-id>/handoffs/`
 
-## Versioning
+## Contributing
 
-`install/VERSION` follows semver. See [`CHANGELOG.md`](CHANGELOG.md). Run `./scripts/check-consistency.py` before releasing a new version — it fails if the profile tables drift from `workflows/feature-sdlc.yaml`.
+1. Fork and clone the repo
+2. Run `./scripts/check-consistency.py` before opening a PR
+3. Bump `install/VERSION` for releases (synced to `package.json` on pack)
+
+## Versioning and publish
+
+Semver tracked in `install/VERSION`. See [`CHANGELOG.md`](CHANGELOG.md).
+
+```bash
+# maintainer release
+npm publish
+```
 
 ## License
 
-MIT — see [`LICENSE`](LICENSE). Adapt freely for your own agent workflows; customize `Agents.md` for your stack, gates, and team preferences.
+MIT — see [`LICENSE`](LICENSE). Fork freely. Customize `Agents.md` for your stack, gates, and team preferences.

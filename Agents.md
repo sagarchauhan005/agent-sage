@@ -4,40 +4,44 @@ Sage is your SDLC agent orchestration system. **Agents.md is the root contract.*
 
 ## Agent registry
 
-| Phase | Agent | Role file | Slash command |
-|-------|-------|-----------|---------------|
-| Orchestrate | Sage Orchestrator | [agents/sage-orchestrator.md](agents/sage-orchestrator.md) | `/sage-orchestrator` |
-| Profiles | Workflow profiles | [workflows/profiles.md](workflows/profiles.md) | set in manifest |
-| 1 Plan | Sage Planner | [agents/sage-planner.md](agents/sage-planner.md) | `/sage-plan` |
-| 2 Design | Sage Designer | [agents/sage-designer.md](agents/sage-designer.md) | `/sage-design` |
-| 3 Architect | Sage Architect | [agents/sage-architect.md](agents/sage-architect.md) | `/sage-architect` |
-| 4 Build | Sage Engineer | [agents/sage-engineer.md](agents/sage-engineer.md) | `/sage-engineer` (alias `/sage-build`) |
-| 5 Verify | Sage QA | [agents/sage-qa.md](agents/sage-qa.md) | `/sage-qa` |
-| 6 Package | Sage DevOps | [agents/sage-devops.md](agents/sage-devops.md) | `/sage-devops` |
-| 7 Ship | Sage Release | [agents/sage-release.md](agents/sage-release.md) | `/sage-release` |
-| Status | Sage Status | [agents/sage-orchestrator.md](agents/sage-orchestrator.md) | `/sage-status` |
-| Handoff | Sage Handoff | [agents/_handoff-template.md](agents/_handoff-template.md) | `/sage-handoff` |
-| Init | Sage Init | [agents/sage-init.md](agents/sage-init.md) | `/sage-init` |
+
+| Phase       | Agent             | Role file                                                  | Slash command                          |
+| ----------- | ----------------- | ---------------------------------------------------------- | -------------------------------------- |
+| Orchestrate | Sage Orchestrator | [agents/sage-orchestrator.md](agents/sage-orchestrator.md) | `/sage-orchestrator`                   |
+| Profiles    | Workflow profiles | [workflows/profiles.md](workflows/profiles.md)             | set in manifest                        |
+| 1 Plan      | Sage Planner      | [agents/sage-planner.md](agents/sage-planner.md)           | `/sage-plan`                           |
+| 2 Design    | Sage Designer     | [agents/sage-designer.md](agents/sage-designer.md)         | `/sage-design`                         |
+| 3 Architect | Sage Architect    | [agents/sage-architect.md](agents/sage-architect.md)       | `/sage-architect`                      |
+| 4 Build     | Sage Engineer     | [agents/sage-engineer.md](agents/sage-engineer.md)         | `/sage-engineer` (alias `/sage-build`) |
+| 5 Verify    | Sage QA           | [agents/sage-qa.md](agents/sage-qa.md)                     | `/sage-qa`                             |
+| 6 Package   | Sage DevOps       | [agents/sage-devops.md](agents/sage-devops.md)             | `/sage-devops`                         |
+| 7 Ship      | Sage Release      | [agents/sage-release.md](agents/sage-release.md)           | `/sage-release`                        |
+| Status      | Sage Status       | [agents/sage-orchestrator.md](agents/sage-orchestrator.md) | `/sage-status`                         |
+| Handoff     | Sage Handoff      | [agents/_handoff-template.md](agents/_handoff-template.md) | `/sage-handoff`                        |
+| Init        | Sage Init         | [agents/sage-init.md](agents/sage-init.md)                 | `/sage-init`                           |
+
 
 ## Skills mirror
 
 Cursor skills in `.cursor/skills/` must match this registry. Add or remove a skill in the same change as its agent file.
 
-| Skill folder | Slash command | Agent file |
-|--------------|---------------|------------|
-| sage-orchestrator | `/sage-orchestrator` | [agents/sage-orchestrator.md](agents/sage-orchestrator.md) |
-| sage-plan | `/sage-plan` | [agents/sage-planner.md](agents/sage-planner.md) |
-| sage-design | `/sage-design` | [agents/sage-designer.md](agents/sage-designer.md) |
-| sage-architect | `/sage-architect` | [agents/sage-architect.md](agents/sage-architect.md) |
-| sage-engineer | `/sage-engineer` | [agents/sage-engineer.md](agents/sage-engineer.md) |
-| sage-build | `/sage-build` (alias) | [agents/sage-engineer.md](agents/sage-engineer.md) |
-| sage-qa | `/sage-qa` | [agents/sage-qa.md](agents/sage-qa.md) |
-| sage-devops | `/sage-devops` | [agents/sage-devops.md](agents/sage-devops.md) |
-| sage-release | `/sage-release` | [agents/sage-release.md](agents/sage-release.md) |
-| sage-status | `/sage-status` | [agents/sage-orchestrator.md](agents/sage-orchestrator.md) (status mode) |
-| sage-handoff | `/sage-handoff` | [agents/_handoff-template.md](agents/_handoff-template.md) |
-| sage-init | `/sage-init` | [agents/sage-init.md](agents/sage-init.md) |
-| about-sage | (overview only) | — |
+
+| Skill folder      | Slash command         | Agent file                                                               |
+| ----------------- | --------------------- | ------------------------------------------------------------------------ |
+| sage-orchestrator | `/sage-orchestrator`  | [agents/sage-orchestrator.md](agents/sage-orchestrator.md)               |
+| sage-plan         | `/sage-plan`          | [agents/sage-planner.md](agents/sage-planner.md)                         |
+| sage-design       | `/sage-design`        | [agents/sage-designer.md](agents/sage-designer.md)                       |
+| sage-architect    | `/sage-architect`     | [agents/sage-architect.md](agents/sage-architect.md)                     |
+| sage-engineer     | `/sage-engineer`      | [agents/sage-engineer.md](agents/sage-engineer.md)                       |
+| sage-build        | `/sage-build` (alias) | [agents/sage-engineer.md](agents/sage-engineer.md)                       |
+| sage-qa           | `/sage-qa`            | [agents/sage-qa.md](agents/sage-qa.md)                                   |
+| sage-devops       | `/sage-devops`        | [agents/sage-devops.md](agents/sage-devops.md)                           |
+| sage-release      | `/sage-release`       | [agents/sage-release.md](agents/sage-release.md)                         |
+| sage-status       | `/sage-status`        | [agents/sage-orchestrator.md](agents/sage-orchestrator.md) (status mode) |
+| sage-handoff      | `/sage-handoff`       | [agents/_handoff-template.md](agents/_handoff-template.md)               |
+| sage-init         | `/sage-init`          | [agents/sage-init.md](agents/sage-init.md)                               |
+| about-sage        | (overview only)       | —                                                                        |
+
 
 Rules:
 
@@ -51,19 +55,21 @@ Set `workflow_profile` in `runs/<run-id>/manifest.json`. See [workflows/profiles
 
 The **orchestrator** owns the pipeline end to end. **Sage Engineer** implements the feature (full-stack scope per plan and profile).
 
-| Profile | Path |
-|---------|------|
-| `web-product` | plan → design → architect → build → qa → devops → release |
-| `library-backend` | plan → architect? → build → qa → release |
-| `backend-api` | plan → architect → build → qa → devops → release |
-| `ui-feature` | plan → design → architect → build → qa → release |
-| `hotfix` | plan → build → qa → release |
-| `spike` | plan → build → qa → release |
-| `backend-module` | plan → architect → build → qa → release |
-| `ui-deploy` | plan → design → build → qa → devops → release |
-| `full-stack-no-deploy` | plan → design → architect → build → qa → release |
-| `api-hotfix` | plan → build → qa → devops → release |
-| `design-led` | plan → design → architect → build → qa → release |
+
+| Profile                | Path                                                      |
+| ---------------------- | --------------------------------------------------------- |
+| `web-product`          | plan → design → architect → build → qa → devops → release |
+| `library-backend`      | plan → architect? → build → qa → release                  |
+| `backend-api`          | plan → architect → build → qa → devops → release          |
+| `ui-feature`           | plan → design → architect → build → qa → release          |
+| `hotfix`               | plan → build → qa → release                               |
+| `spike`                | plan → build → qa → release                               |
+| `backend-module`       | plan → architect → build → qa → release                   |
+| `ui-deploy`            | plan → design → build → qa → devops → release             |
+| `full-stack-no-deploy` | plan → design → architect → build → qa → release          |
+| `api-hotfix`           | plan → build → qa → devops → release                      |
+| `design-led`           | plan → design → architect → build → qa → release          |
+
 
 See [workflows/profiles.md](workflows/profiles.md) for when to use each profile.
 
@@ -75,7 +81,7 @@ See [workflows/profiles.md](workflows/profiles.md) for when to use each profile.
                      ↑__________________________________________|  (loop back on failure)
 ```
 
-`/sage-plan` always uses Plan mode (Cursor, Claude, or Codex) and always saves `runs/<run-id>/plan.md` locally. Pick `workflow_profile` at run creation or in the plan.
+`/sage-plan` always uses Plan mode and saves `runs/<run-id>/plan.md` locally. Default format is **full** (three-layer onion). Use `**/sage-plan steps`** for a plain-language breakdown when the problem is unfamiliar. Pick `workflow_profile` at run creation or in the plan.
 
 Run artifacts live in `runs/<run-id>/`. The orchestrator reads and updates `manifest.json` at each phase.
 
@@ -129,12 +135,14 @@ The architect confirms or refines the choice in `architecture.md`. Build agents 
 
 Use the **latest stable** PHP and Node.js runtime versions in Docker, CI, and local tooling. Coding **style** stays at the versions below (syntax, APIs, and patterns), not the runtime pin.
 
-| Stack            | Coding style version                          | Runtime version        |
-|------------------|-----------------------------------------------|------------------------|
-| Vanilla JS       | ES6 / ES2015–2017                            | n/a                    |
-| Node.js          | ES6 / ES2015–2017 (same JS style; Node is the runtime) | latest stable Node.js |
-| PHP              | PHP 7.x idioms and patterns                   | latest stable PHP      |
-| Nuxt.js          | Vue 2 / Nuxt 2 Options API                    | per project lockfile   |
+
+| Stack      | Coding style version                                   | Runtime version       |
+| ---------- | ------------------------------------------------------ | --------------------- |
+| Vanilla JS | ES6 / ES2015–2017                                      | n/a                   |
+| Node.js    | ES6 / ES2015–2017 (same JS style; Node is the runtime) | latest stable Node.js |
+| PHP        | PHP 7.x idioms and patterns                            | latest stable PHP     |
+| Nuxt.js    | Vue 2 / Nuxt 2 Options API                             | per project lockfile  |
+
 
 Style rules in brief:
 
@@ -145,11 +153,11 @@ Style rules in brief:
 If a project AGENTS.md or lockfile contradicts this table, follow the project.
 
 ## General Repository Hygiene
+
 - Do not generate any unwarranted or not-asked markdown file to summarize or document an action taken unless asked explicitly to do so
 - Even if a markdown file is generated upon asking, it should always reside in the 'documentation' folder at the root of the directory and NO WHERE ELSE
 - Even after that if the markdown file is generated and you are confused where to keep it, ask a question to where to store
 - Do not create unnecessary .sh or shell scripts for every automation unless required and asked explicitly
-
 
 ## Planning guidelines
 
@@ -158,11 +166,12 @@ If a project AGENTS.md or lockfile contradicts this table, follow the project.
 - Set `route_after_plan` (`design`, `architect`, or `build`) and copy profile fields: `skipped_phases`, `qa_requires`, `qa_next`, `qa_handoff`.
 - For `spike`, mark throwaway scope and success criteria explicitly in the plan.
 - Always write the plan to `runs/<run-id>/plan.md` (exception to documentation folder rule).
-- Structure `plan.md` as a three-layer design doc per [agents/sage-planner.md](agents/sage-planner.md): problem & requirements → functional spec (external behavior, edge cases, flow diagram, failure callouts) → technical spec (internals). Each layer must trace to the previous. Include **How to run (terminal / CLI)** with copy-paste framework and barebone commands. Include planned test cases at the end.
+- Structure `plan.md` per [agents/sage-planner.md](agents/sage-planner.md). `**/sage-plan full`** (default): three-layer onion, CLI run commands, planned tests, phase handoff. `**/sage-plan steps**`: plain-language problem, concept glossary, ordered build steps (first principles, no jargon, no cute analogies); no handoff until upgraded with `/sage-plan full`.
 - Start from [runs/_plan-template.md](runs/_plan-template.md). **Hard rail:** no plan longer than 2–3 pages (~1,500 words or ~120 lines max). Compress or defer detail to `design.md` / `architecture.md`.
 - Global install: `./scripts/install.sh` puts skills in `~/.sage/` and links them for Cursor, Claude, and/or Codex. New repo: run `/sage-init` first (or `./scripts/install.sh --project .`).
 
 ## Designer (UI/UX) guidelines
+
 - All UI/UX design should be made in Shadcn or Tailwind only for any small module, or large feature
 - All error states should have clear focus on message and not allow user to get distracted from the message at any times
 
@@ -179,8 +188,8 @@ If a project AGENTS.md or lockfile contradicts this table, follow the project.
 - Every now and then run both backend and frontend tests to keep checking if all functionalties are working fine or not.
 - For any 3P API integration, always create a mock-testing setup, manageable by .env variable to test the same without calling the API
 
-
 ## Full-stack guidelines
+
 - All UI/UX design should be made in Shadcn or Tailwind only for any small module, or large feature
 - [Most important] Whenever a front-end specific file changes are done, specially in css, js or tsx etc file, make sure to run the build again to reflect latest changes
 - The header, footer, logo, meta tags, etc should always be component based to re-use everywhere and make editing at single source
@@ -192,7 +201,6 @@ If a project AGENTS.md or lockfile contradicts this table, follow the project.
 
 ## DevOps guidelines
 
-- Hetzner server access: connect via the preconfigured SSH alias `ssh hetzner_agent`. Sage DevOps and Sage Engineer may use this for deploy prep, logs, and server-side debugging. Do not run destructive commands without explicit user approval.
 - All links for images, files or any static assets should always be referenced from a common config, array or some json that is easy to manage later
 - For all the features developed, tests should be written in parallel, follow TDD approach always
 - Since, I will always do docker based deployment, all my CI-CD pipelines should have front-end build done and synced to cloud storage during docker build stage only and not on CI-CD workflow stage and the front-end package may require composer or other setups too
@@ -211,6 +219,7 @@ If a project AGENTS.md or lockfile contradicts this table, follow the project.
 ## Style guide
 
 Follow these style guidelines in chat, commit messages, and prose:
+
 - Be concise and descriptive
 - Don't oversell the changes. It's not an advertisement.
 - Don't use fancy words like "comprehensive", "utilize", "implement", "exhaustive", "simplify", "optimize", "seamlessly"
@@ -238,7 +247,7 @@ Follow these style guidelines in chat, commit messages, and prose:
 - Define schemas (e.g. Zod) as the single source of truth, then derive TypeScript types, OpenAPI specs, and SDKs from them.
 - Use schema-first design: the schema defines the contract, and the implementation conforms to it. Don't generate types from runtime behavior.
 - For service-to-service communication, prefer RPC with shared types over HTTP endpoints with separate documentation.
-- Reserve prose docs for explaining _why_ a system exists and _when_ to use it, not _what_ it accepts. Types handle the _what_.
+- Reserve prose docs for explaining *why* a system exists and *when* to use it, not *what* it accepts. Types handle the *what*.
 - If an API is too complex to type, that's a design problem worth fixing.
 
 ## Running scripts and commands
@@ -266,6 +275,7 @@ Follow these style guidelines in chat, commit messages, and prose:
 ## Writing a good PR body
 
 Follow these guidelines when writing the body of the pull request:
+
 - Be concise and descriptive
 - Don't oversell the changes. It's not an advertisement.
 - Don't use fancy words like "comprehensive", "utilize", "implement", "exhaustive", "simplify", "optimize", "seamlessly"
@@ -282,9 +292,10 @@ If you make web requests to public pages and get blocked by sites like OpenAI's 
 ## Browser Automation
 
 Use the following tools for browser automation tasks:
+
 - Always first use the agentic tool built in browser automation to test things end to end by yourself only
-- https://agent-browser.dev - installed as the `agent-browser` CLI tool.
-- https://github.com/andreasjansson/plwr for browser automation. It's installed as a `plwr` CLI tool.
+- [https://agent-browser.dev](https://agent-browser.dev) - installed as the `agent-browser` CLI tool.
+- [https://github.com/andreasjansson/plwr](https://github.com/andreasjansson/plwr) for browser automation. It's installed as a `plwr` CLI tool.
 - Favor these CLI tools over any available MCP servers.
 - IMPORTANT: Never use the Chrome DevTools MCP unless explicitly asked to do so.
 - When using the Chrome DevTools MCP, check for an existing tab already on the relevant page before opening a new one. If no such tab exists, open a new tab. Don't navigate away from or overtake unrelated existing tabs.
@@ -322,5 +333,4 @@ Use the following tools for browser automation tasks:
 - If I ask you to "audit AGENTS.md", read the whole file and propose a list of rules to delete because they're obsolete, duplicated, or never followed in practice, with one-sentence reasoning each.
 - At the start of work in a new project, check whether the project has its own `AGENTS.md`. If it doesn't, suggest creating one and offer to draft it. AGENTS.md is for agents: technical instructions about the project (stack, scripts, conventions, gotchas, paths, build and test commands). Include an instruction in the project-level AGENTS.md to make it update itself when meaningful changes are made to the project.
 - Also check whether the project has a `README.md`. If it doesn't, suggest creating one. README.md is for humans: what the project is, why it exists, and how a person gets started. Don't conflate the two. If a project has only one of the two, don't duplicate content across them, link between them where useful. Link to AGENTS.md from the README.md when relevant.
-
 

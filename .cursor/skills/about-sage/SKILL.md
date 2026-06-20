@@ -17,7 +17,7 @@ Sage is an SDLC agent orchestration system. Specialized agents run phases of sof
 | Agent              | What it does                                              | Primary role        |
 |--------------------|-----------------------------------------------------------|---------------------|
 | Sage Orchestrator  | Runs the pipeline, picks profile, enforces gates          | Orchestrate         |
-| Sage Planner       | Clarifies requirements, writes `plan.md` in Plan mode     | Plan                |
+| Sage Planner       | Clarifies requirements; `plan.md` in **full** or **steps** format | Plan                |
 | Sage Designer      | UI/UX specs, components, asset structure                  | Design              |
 | Sage Architect     | Schemas, boundaries, deployment impact, test strategy     | Architect           |
 | Sage Engineer      | Full-stack implementation, tests, wiring                  | Build               |
@@ -30,7 +30,7 @@ Sage is an SDLC agent orchestration system. Specialized agents run phases of sof
 
 ## Slash commands
 
-Each phase agent maps to a `/sage-*` command (e.g. `/sage-plan`, `/sage-engineer`). In a **new project**, run `/sage-init` first. Then start a run with `/sage-orchestrator` or `/sage-plan`. Check progress with `/sage-status`.
+Each phase agent maps to a `/sage-*` command. Use **`/sage-plan steps`** when the problem is unfamiliar (plain breakdown). Use **`/sage-plan`** or **`/sage-plan full`** for the handoff-ready spec. Start a run with `/sage-orchestrator`.
 
 Skills live in `.cursor/skills/` and must match the Skills mirror table in [Agents.md](../../Agents.md). One skill folder per registry row; no orphan skills.
 

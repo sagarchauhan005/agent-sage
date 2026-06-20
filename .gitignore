@@ -4,6 +4,8 @@
 __pycache__/
 *.pyc
 .pytest_cache/
+node_modules/
+*.tgz
 
 # Sage run artifacts (this tool repo ships templates only; real runs belong
 # in the consumer project, not here).

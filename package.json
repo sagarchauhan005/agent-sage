@@ -1,0 +1,49 @@
+{
+  "name": "agent-sage",
+  "version": "1.2.0",
+  "description": "SDLC agent orchestration for Cursor, Claude Code, and Codex",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "sage": "bin/sage.js",
+    "agent-sage": "bin/sage.js"
+  },
+  "files": [
+    "bin/",
+    "scripts/install.sh",
+    "scripts/generate-global-skills.py",
+    "agents/",
+    "workflows/",
+    "runs/_plan-template.md",
+    "runs/_manifest-template.json",
+    "runs/_manifest-template.schema.json",
+    "install/",
+    "Agents.md",
+    "CLAUDE.md",
+    ".cursor/skills/",
+    ".cursor/rules/sage-system.mdc"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "prepack": "node scripts/sync-version.js && python3 scripts/check-consistency.py",
+    "test": "python3 -m pytest scripts/tests/ -v && python3 scripts/check-consistency.py"
+  },
+  "keywords": [
+    "cursor",
+    "claude",
+    "codex",
+    "agents",
+    "sdlc",
+    "skills"
+  ],
+  "homepage": "https://github.com/sagarchauhan005/agent-sage#readme",
+  "bugs": {
+    "url": "https://github.com/sagarchauhan005/agent-sage/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sagarchauhan005/agent-sage.git"
+  }
+}
